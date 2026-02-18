@@ -3,9 +3,10 @@ export interface HeroComponentProps {
     url_img?: string;
     heroContent: string;
     height?: number;
+    onStartNowClick: () => void;
 }
 
-function HeroComponent({heroContent, title, url_img = '', height = 100}: HeroComponentProps) {
+function HeroComponent({heroContent, title, url_img = '', height = 100, onStartNowClick}: HeroComponentProps) {
     const styles: React.CSSProperties = {
         backgroundImage: `url(${url_img})`,
         height: `${height}dvh`,
@@ -19,7 +20,7 @@ function HeroComponent({heroContent, title, url_img = '', height = 100}: HeroCom
                 <p className="py-6">
                     {heroContent}
                 </p>
-                <button className="btn btn-primary">Empieza ahora</button>
+                <button className="btn btn-primary" onClick={onStartNowClick}>Empieza ahora</button>
                 </div>
             </div>
         </div>
