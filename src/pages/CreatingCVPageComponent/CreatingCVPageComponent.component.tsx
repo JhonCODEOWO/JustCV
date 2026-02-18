@@ -1,3 +1,4 @@
+import CreateCvForm from "../../CV/components/CreateCvForm/CreateCvForm.component";
 import HeaderComponent from "../../shared/components/HeaderComponent/HeaderComponent.component";
 
 function CreatingCVPageComponent() {
@@ -6,6 +7,7 @@ function CreatingCVPageComponent() {
             <HeaderComponent level={1}>
                 Todo listo, comienza a colocar tu información.
             </HeaderComponent>
+            <CreateCvForm/>
         </section>
      );
 }
