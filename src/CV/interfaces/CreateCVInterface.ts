@@ -7,13 +7,14 @@ export interface CreateCvInterface {
     workExperience:   WorkExperience[];
     resume:           string;
     education:        Education[];
+    educationDraft: Education;
 }
 
 export interface Education {
     titleName:       string;
     institutionName: string;
-    graduationDate:  Date;
-    type:            string;
+    graduationDate:  string;
+    type:           EducationTypes;
 }
 
 export interface ProfesionalLinks {
@@ -33,6 +34,12 @@ export interface Residence {
 export interface WorkExperience {
     companyName:  string;
     occupation:   string;
-    startDate:    Date;
-    achievements: string[];
+    startDate:    string;
+    achievements: Achievement[];
 }
+
+export interface Achievement {
+    description: string,
+}
+
+export type EducationTypes = 'curso' | 'titulo';
