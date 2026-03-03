@@ -1,14 +1,14 @@
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
-import type { CreateCvInterface } from "../../../../interfaces/CreateCVInterface";
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
 import CreateAchievementComponent from "../../../CreateAchievement/CreateAchievement.component";
 import HeaderWithContentComponent from "../../../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
+import type { CreateCvFormBody } from "../../CreateCvForm.component";
 
 interface WorkExperienceComponentProps {
-  control: Control<CreateCvInterface>;
-  errors: FieldErrors<CreateCvInterface>;
+  control: Control<CreateCvFormBody>;
+  errors: FieldErrors<CreateCvFormBody>;
   index: number;
-  register: UseFormRegister<CreateCvInterface>;
+  register: UseFormRegister<CreateCvFormBody>;
   onDeleteWorkExperienceElement: (id: number) => void;
 }
 

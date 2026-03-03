@@ -1,7 +1,7 @@
 import { useFieldArray, type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
-import type { CreateCvInterface } from "../../interfaces/CreateCVInterface";
 import InputComponent from "../../../shared/components/InputComponent/input.component";
 import HeaderComponent from "../../../shared/components/HeaderComponent/HeaderComponent.component";
+import type { CreateCvFormBody } from "../CreateCvForm/CreateCvForm.component";
 
 interface CreateAchievementComponentProps {
     /**
@@ -11,17 +11,17 @@ interface CreateAchievementComponentProps {
     /**
      * Control of the userForm
      */
-    control: Control<CreateCvInterface>,
+    control: Control<CreateCvFormBody>,
 
     /**
      * Object of errors to show it based in the name of inputs
      */
-    errors: FieldErrors,
+    errors: FieldErrors<CreateCvFormBody>,
 
     /**
      * Register from a useForm to register input elements
      */
-    register: UseFormRegister<CreateCvInterface>
+    register: UseFormRegister<CreateCvFormBody>
 }
 
 function CreateAchievementComponent({index, control, errors, register}: CreateAchievementComponentProps) {
@@ -39,12 +39,13 @@ function CreateAchievementComponent({index, control, errors, register}: CreateAc
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
                 </button>
             </div>
+            <p className="text-error text-xs text-center w-full">{errors.workExperience?.[index]?.achievements?.message}</p>
             {/* Renderización de elementos */}
             <div className="grid grid-cols-3 max-h-39 overflow-y-auto justify-items-center">
                 {achievements.map((achievement, indexAchievement) => {
                     return (
                         <div key={achievement.id} className="flex gap-x-3 items-center">
-                            <InputComponent<CreateCvInterface> 
+                            <InputComponent<CreateCvFormBody> 
                                 errors={errors} 
                                 label="Descripción del logro" 
                                 name={`workExperience.${index}.achievements.${indexAchievement}.description`} 

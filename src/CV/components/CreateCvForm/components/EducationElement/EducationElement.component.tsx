@@ -1,19 +1,23 @@
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import type { CreateCvInterface } from "../../../../interfaces/CreateCVInterface";
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
+import type { CreateCvFormBody } from "../../CreateCvForm.component";
+
+
 
 interface EducationElementComponentProps {
-    control: Control<CreateCvInterface>,
-    errors: FieldErrors<CreateCvInterface>,
+    control: Control<CreateCvFormBody>,
+    errors: FieldErrors<CreateCvFormBody>,
     index: number;
-    register: UseFormRegister<CreateCvInterface>,
+    register: UseFormRegister<CreateCvFormBody>,
     onDeleteEducationElement: (id: number) => void;
 }
 
 function EducationElementComponent({control, errors, index, register, onDeleteEducationElement}: EducationElementComponentProps) {
+  console.log(errors);
   return (
     <div className="grid grid-cols-2 items-center justify-between border border-base-300 bg-base-200 p-3 rounded">
-      <InputComponent<CreateCvInterface>
+      <InputComponent<CreateCvFormBody>
         errors={errors}
         name={`education.${index}.titleName`}
         register={register}
@@ -26,7 +30,7 @@ function EducationElementComponent({control, errors, index, register, onDeleteEd
           },
         }}
       />
-      <InputComponent<CreateCvInterface>
+      <InputComponent<CreateCvFormBody>
         errors={errors}
         name={`education.${index}.institutionName`}
         register={register}
@@ -39,7 +43,7 @@ function EducationElementComponent({control, errors, index, register, onDeleteEd
           },
         }}
       />
-      <InputComponent<CreateCvInterface>
+      <InputComponent<CreateCvFormBody>
         errors={errors}
         name={`education.${index}.graduationDate`}
         register={register}

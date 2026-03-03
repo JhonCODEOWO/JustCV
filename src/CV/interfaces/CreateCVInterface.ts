@@ -7,7 +7,6 @@ export interface CreateCvInterface {
     workExperience:   WorkExperience[];
     resume:           string;
     education:        Education[];
-    educationDraft: Education;
 }
 
 export interface Education {
@@ -18,12 +17,12 @@ export interface Education {
 }
 
 export interface ProfesionalLinks {
-    instagram:    string;
-    facebook:     string;
-    twitter:      string;
-    linkedIn:     string;
-    github:       string;
-    portfolioWeb: string;
+    instagram?:    string;
+    facebook?:     string;
+    twitter?:      string;
+    linkedIn?:     string;
+    github?:       string;
+    portfolioWeb?: string;
 }
 
 export interface Residence {
