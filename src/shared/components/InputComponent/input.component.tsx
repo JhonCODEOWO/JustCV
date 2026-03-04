@@ -12,10 +12,12 @@ interface InputComponentProps<T extends FieldValues> {
 function InputComponent<T extends FieldValues>({label,type, name, register, errors, validations = {}}: InputComponentProps<T>) {
     const required: boolean = Object.keys(validations).includes('required');
     const error = get(errors, name);
+    const globalInputClasses = 'input outline-0';
+    const errorClasses = (error)? 'border border-error': '';
     return (
         <fieldset className="fieldset">
             <legend className="fieldset-legend flex items-center">{label} {required && <p className="label text-error">*</p>}</legend>
-                <input {...register(name, validations)} type={type} className="input" placeholder="Type here" />
+                <input {...register(name, validations)} type={type} className={`${globalInputClasses} ${errorClasses}`} placeholder="Type here" />
                 {!required && <p className="label">Opcional</p>}
                 {error && <span className="text-error text-xs">{String(error.message)}</span>}
         </fieldset>

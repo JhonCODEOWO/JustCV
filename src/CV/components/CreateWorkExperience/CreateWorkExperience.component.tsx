@@ -1,7 +1,7 @@
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import type { Achievement, WorkExperience } from "../../interfaces/CreateCVInterface";
 import InputComponent from "../../../shared/components/InputComponent/input.component";
-import CreateAchievementComponent from "../CreateAchievement/CreateAchievement.component";
+import CreateAchievementComponent from "../CreateCvForm/components/CreateAchievement/CreateAchievement.component";
 import { useEffect } from "react";
 
 interface CreateWorkExperienceComponentProps {

@@ -4,7 +4,7 @@ const Education = z.object({
     titleName: z.string().min(1, 'Es obligatorio colocar el nombre del título'),
     institutionName: z.string().min(1, 'Es necesario conocer el nombre de la institución'),
     graduationDate: z.string().min(1, 'Debes colocar completa la fecha'),
-    type: z.enum(['curso', 'titulo'])
+    type: z.enum(['curso', 'titulo'], 'No se admite otro tipo de dato, selecciona curso o título')
 });
 
 const ProfesionalLinks = z.object({
@@ -33,7 +33,7 @@ export const CreateCVSchema = z.object({
     fullname: z.string().regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+(?:\s[A-Za-zÁÉÍÓÚáéíóúÑñÜü]+)+$/, 'Debes incluir al menos un apellido o ambos apellidos separados por espacio.'),
     phoneNumber: z.string()
                     .regex(/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/, 'Escribe tu número de teléfono correctamente.'),
-    resume: z.string().min(20),
+    resume: z.string().min(20, 'Un resumen profesional no puede ser tan pequeño, redacta un poco más acerca de ti.'),
     email: z.email(),
     education: z.array(Education).min(1, 'Debes agregar al menos un elemento de educación a tu CV.'),
     profesionalLinks: ProfesionalLinks,

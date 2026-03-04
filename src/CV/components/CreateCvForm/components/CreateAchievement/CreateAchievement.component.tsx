@@ -1,7 +1,7 @@
 import { useFieldArray, type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
-import InputComponent from "../../../shared/components/InputComponent/input.component";
-import HeaderComponent from "../../../shared/components/HeaderComponent/HeaderComponent.component";
-import type { CreateCvFormBody } from "../CreateCvForm/CreateCvForm.component";
+import InputComponent from "../../../../../shared/components/InputComponent/input.component";
+import HeaderComponent from "../../../../../shared/components/HeaderComponent/HeaderComponent.component";
+import type { CreateCvFormBody } from "../../CreateCvForm.component";
 
 interface CreateAchievementComponentProps {
     /**
@@ -41,7 +41,8 @@ function CreateAchievementComponent({index, control, errors, register}: CreateAc
             </div>
             <p className="text-error text-xs text-center w-full">{errors.workExperience?.[index]?.achievements?.message}</p>
             {/* Renderización de elementos */}
-            <div className="grid grid-cols-3 max-h-39 overflow-y-auto justify-items-center">
+            <div className="grid grid-cols-3 h-39 overflow-y-auto justify-items-center items-center">
+                {achievements.length === 0 && <p className="col-span-3">No has añadido nada todavía</p>}
                 {achievements.map((achievement, indexAchievement) => {
                     return (
                         <div key={achievement.id} className="flex gap-x-3 items-center">

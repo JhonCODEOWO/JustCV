@@ -160,10 +160,11 @@ function CreateCvForm() {
                             />
                         </div>
 
+                        {/* A component text area doesn't exists it need to be created */}
                         <fieldset className="fieldset">
                             <legend className="fieldset-legend">Resume tu perfil profesional</legend>
                             <textarea 
-                                className="textarea h-24 w-full" 
+                                className={`textarea h-24 w-full outline-0 ${errors.resume ? 'border border-error' : ''}`}
                                 placeholder="Bio"
                                 
                                 {...register("resume", {
@@ -173,7 +174,7 @@ function CreateCvForm() {
                             >
 
                             </textarea>
-                            <p>{errors.resume && errors.resume.message}</p>
+                            <p className="text-xs text-error">{errors.resume && errors.resume.message}</p>
                         </fieldset>
                     </section>
                 </section>
@@ -202,7 +203,7 @@ function CreateCvForm() {
                         {fields.map((education, index) => {
                             
                             return (
-                                <EducationElementComponent control={control} errors={errors} index={index} register={register} key={education.id} onDeleteEducationElement={handleDeleteEducationElement}/>
+                                <EducationElementComponent trigger={trigger} control={control} errors={errors} index={index} register={register} key={education.id} onDeleteEducationElement={handleDeleteEducationElement}/>
                             )
                         })}
                     </section>
@@ -220,12 +221,12 @@ function CreateCvForm() {
                         </HeaderWithContentComponent>
                     
                     
-                    <section className="flex flex-col gap-y-3 rounded">
-                        <p className="text-error text-xs">{errors.workExperience?.message}</p>
-                        {workExperienceFields.length === 0 && <p className="w-full text-center">Sin experiencias laborales añadidas</p>}
+                    <section className="flex flex-col gap-3 rounded">
+                        {errors.workExperience && <p className="text-error text-xs col-span-2">{errors.workExperience.message}</p>}
+                        {workExperienceFields.length === 0 && <p className="w-full text-center col-span-2">Sin experiencias laborales añadidas</p>}
                         {workExperienceFields.map((experience, index) => {
                             return (
-                                <WorkExperienceElementComponent control={control} errors={errors} index={index} onDeleteWorkExperienceElement={handleDeleteWorkExperienceElement} register={register} key={experience.id}/>
+                                <WorkExperienceElementComponent trigger={trigger} control={control} errors={errors} index={index} onDeleteWorkExperienceElement={handleDeleteWorkExperienceElement} register={register} key={experience.id}/>
                             )
                         })}
                     </section>
