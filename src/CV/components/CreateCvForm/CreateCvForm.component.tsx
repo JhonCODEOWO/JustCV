@@ -209,16 +209,17 @@ function CreateCvForm() {
                     </section>
                 </section>
             </div>
-            <section className="bg-base-100 p-4">
-                        <HeaderWithContentComponent
+            <section className="flex justify-center">
+                <div className="w-[80%] bg-base-100 p-4 rounded">
+                    <HeaderWithContentComponent
                         title="Experiencia laboral"
                         content="Añade tu experiencia laboral"
                         level={3}
                         positionText="start"
                         className="mb-4"
-                        >
-                            <button type="button" className="btn btn-success" onClick={() => appendWorkExperience({achievements: [], companyName: '', occupation: '', startDate: ''})} >Añadir experiencia laboral</button>
-                        </HeaderWithContentComponent>
+                    >
+                        <button type="button" className="btn btn-success" onClick={() => appendWorkExperience({achievements: [], companyName: '', occupation: '', startDate: ''})} >Añadir experiencia laboral</button>
+                    </HeaderWithContentComponent>
                     
                     
                     <section className="flex flex-col gap-3 rounded">
@@ -230,6 +231,7 @@ function CreateCvForm() {
                             )
                         })}
                     </section>
+                </div>
             </section>
             <button className="btn btn-info" type="submit">Generar CV</button>
         </form>
