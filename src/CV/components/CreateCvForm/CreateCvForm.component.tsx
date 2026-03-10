@@ -1,4 +1,4 @@
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, type FieldPath } from "react-hook-form";
 import InputComponent from "../../../shared/components/InputComponent/input.component";
 import EducationElementComponent from "./components/EducationElement/EducationElement.component";
 import WorkExperienceElementComponent from "./components/WorkExperienceElement/WorkExperienceElement.component";
@@ -7,21 +7,43 @@ import { CreateCVSchema } from "./schemas/CreateCVSchema";
 import { z} from "zod"
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateCvInterface } from "../../interfaces/CreateCVInterface";
+import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
+import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 
 export type CreateCvFormBody = z.infer<typeof CreateCVSchema>;
+type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
 
 function CreateCvForm() {
+    const {actualPhase, getActualStep, isEndPointer, isStartPointer, isValidInTimeLine, nextPhase, prevPhase, totalPhases} = useSteps([
+        {
+            id: 'personalData',
+            title: 'Datos personales'
+        },
+        {
+            id: 'educationData',
+            title: 'Información Académica'
+        },
+        {
+            id: 'laboralData',
+            title: 'Experiencia Laboral'
+        },
+        {
+            id: 'finalPhase',
+            title: 'Finalizar proceso'
+        },
+    ]);
+    
     const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues} = useForm<CreateCvFormBody>({
         mode: 'onChange',
         defaultValues: {
-            fullname: '',
-            email: '',
-            phoneNumber: ``,
-            resume: '',
-            education: [],
+            fullname: 'Jonathan Juárez',
+            email: 'jjv20618@gmail.com',
+            phoneNumber: `7299353872`,
+            resume: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit pulvinar odio, vel lacinia odio. Morbi maximus nisi in molestie ornare. Etiam in arcu enim. Curabitur non augue neque. Ut. `,
+            education: [{graduationDate: '01-09-2002', institutionName: 'ITSSNP', titleName: 'Ing. Informática', type: 'titulo'}],
             profesionalLinks: {github: '', linkedIn: '', portfolioWeb: ''},
-            residence: {city: '', country: ''},
-            workExperience: []
+            residence: {city: 'Zacatlán', country: 'Puebla'},
+            workExperience: [{achievements: [{description: 'something'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}]
         },
         resolver: zodResolver(CreateCVSchema)
     });
@@ -35,6 +57,19 @@ function CreateCvForm() {
 
     const handleDeleteWorkExperienceElement = (id:number) => {
         removeWorkExperience(id);
+    }
+
+    const validate = async (stepID: StepID) => {
+        const values: Record<StepID, FieldPath<CreateCvFormBody>[]> = {
+            'personalData': ["fullname", "email", "phoneNumber", "profesionalLinks", "residence", "resume"],
+            educationData: ["education"],
+            laboralData: ["workExperience"],
+            finalPhase: []
+        }
+        const valid = await trigger(values[stepID]);
+        console.log(errors);
+        if(!valid) return;
+        nextPhase();
     }
 
     async function onSubmit(event: React.SubmitEvent){
@@ -55,185 +90,214 @@ function CreateCvForm() {
     
     return (
         <form onSubmit={(event) => onSubmit(event)} className="flex flex-col gap-y-6">
-            <div className="grid grid-cols-2 gap-x-4 h-134 items-start">
-                <section className="bg-base-100 p-2 rounded">
-                    <HeaderWithContentComponent
-                        title="Datos personales"
-                        content="Ingresa tus datos personales"
-                        level={3}
-                    />
-                    <section className="h-119 overflow-y-auto">
-                        <div className="grid grid-cols-2">
-                            <InputComponent<CreateCvFormBody> 
-                            errors={errors} 
-                            label="Nombre completo" 
-                            name="fullname" 
-                            register={register} 
-                            type="text"
-                            validations={
-                                    {
-                                        required: "Este campo es requerido",
-                                    }
-                                }
-                            />
-                            <InputComponent<CreateCvFormBody> 
+            <div className="gap-x-4 items-start w-1/2 mx-auto my-0">
+                <StepsTimelineComponent actualPhase={actualPhase} isEndPointer={isEndPointer} isStartPointer={isStartPointer} isValidInTimeLine={isValidInTimeLine} steps={totalPhases}/>
+
+                {
+                    actualPhase === 0
+                        &&
+                    <section className="bg-base-100 p-5 rounded">
+                        <HeaderWithContentComponent
+                            title="Datos personales"
+                            content="Ingresa tus datos personales"
+                            level={3}
+                        />
+                        <section>
+                            <div className="grid grid-cols-2">
+                                <InputComponent<CreateCvFormBody> 
                                 errors={errors} 
-                                label="Correo electrónico" 
-                                name="email" 
+                                label="Nombre completo" 
+                                name="fullname" 
                                 register={register} 
                                 type="text"
                                 validations={
                                         {
                                             required: "Este campo es requerido",
-                                            minLength: {message: "Debes colocar al menos 8 caracteres", value: 8},
                                         }
                                     }
-                            />
-                            
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="Teléfono de contacto" 
-                                name="phoneNumber" 
-                                register={register} 
-                                type="text"
-                                validations={
-                                        {
-                                            required: "Este campo es requerido",
-                                            minLength: {message: "Un número de teléfono tiene mínimo 8 caracteres", value: 8},
-                                            maxLength: {message: "El número de teléfono con lada no puede ser mayor a 13 caracteres", value: 13},
-                                            pattern: {
-                                                message: 'Asegúrate de añadir un número de teléfono válido', 
-                                                value: /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+                                />
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="Correo electrónico" 
+                                    name="email" 
+                                    register={register} 
+                                    type="text"
+                                    validations={
+                                            {
+                                                required: "Este campo es requerido",
+                                                minLength: {message: "Debes colocar al menos 8 caracteres", value: 8},
                                             }
                                         }
-                                    }
-                            />
-
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="Ciudad de residencia" 
-                                name="residence.city" 
-                                register={register} 
-                                type="text"
-                                validations={
-                                        {
-                                            required: "Este campo es requerido",
-                                            minLength: {message: "Debes colocar al menos 8 caracteres", value: 8},
-                                        }
-                                    }
-                            />
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="País de residencia" 
-                                name="residence.country" 
-                                register={register} 
-                                type="text"
-                                validations={
-                                        {
-                                            required: "Este campo es requerido",
-                                        }
-                                    }
-                            />
-                        </div>
-
-                        <div className="flex gap-x-3 justify-between">
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="Github" 
-                                name="profesionalLinks.github" 
-                                register={register} 
-                                type="text"
-                            />
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="LinkedIn" 
-                                name="profesionalLinks.linkedIn" 
-                                register={register} 
-                                type="text"
-                            />
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="Portafolio Web" 
-                                name="profesionalLinks.portfolioWeb" 
-                                register={register} 
-                                type="text"
-                            />
-                        </div>
-
-                        {/* A component text area doesn't exists it need to be created */}
-                        <fieldset className="fieldset">
-                            <legend className="fieldset-legend">Resume tu perfil profesional</legend>
-                            <textarea 
-                                className={`textarea h-24 w-full outline-0 ${errors.resume ? 'border border-error' : ''}`}
-                                placeholder="Bio"
+                                />
                                 
-                                {...register("resume", {
-                                    required: {message: 'El perfil profesional es obligatorio',value: true},
-                                    minLength: {message: 'Un resumen de perfil profesional no puede ser demasiado corto', value: 200}
-                                })}
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="Teléfono de contacto" 
+                                    name="phoneNumber" 
+                                    register={register} 
+                                    type="text"
+                                    validations={
+                                            {
+                                                required: "Este campo es requerido",
+                                                minLength: {message: "Un número de teléfono tiene mínimo 8 caracteres", value: 8},
+                                                maxLength: {message: "El número de teléfono con lada no puede ser mayor a 13 caracteres", value: 13},
+                                                pattern: {
+                                                    message: 'Asegúrate de añadir un número de teléfono válido', 
+                                                    value: /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
+                                                }
+                                            }
+                                        }
+                                />
+
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="Ciudad de residencia" 
+                                    name="residence.city" 
+                                    register={register} 
+                                    type="text"
+                                    validations={
+                                            {
+                                                required: "Este campo es requerido",
+                                                minLength: {message: "Debes colocar al menos 8 caracteres", value: 8},
+                                            }
+                                        }
+                                />
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="País de residencia" 
+                                    name="residence.country" 
+                                    register={register} 
+                                    type="text"
+                                    validations={
+                                            {
+                                                required: "Este campo es requerido",
+                                            }
+                                        }
+                                />
+                            </div>
+
+                            <div className="flex gap-x-3 justify-between">
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="Github" 
+                                    name="profesionalLinks.github" 
+                                    register={register} 
+                                    type="text"
+                                />
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="LinkedIn" 
+                                    name="profesionalLinks.linkedIn" 
+                                    register={register} 
+                                    type="text"
+                                />
+                                <InputComponent<CreateCvFormBody> 
+                                    errors={errors} 
+                                    label="Portafolio Web" 
+                                    name="profesionalLinks.portfolioWeb" 
+                                    register={register} 
+                                    type="text"
+                                />
+                            </div>
+
+                            {/* A component text area doesn't exists it need to be created */}
+                            <fieldset className="fieldset">
+                                <legend className="fieldset-legend">Resume tu perfil profesional</legend>
+                                <textarea 
+                                    className={`textarea h-24 w-full outline-0 ${errors.resume ? 'border border-error' : ''}`}
+                                    placeholder="Bio"
+                                    
+                                    {...register("resume", {
+                                        required: {message: 'El perfil profesional es obligatorio',value: true},
+                                        minLength: {message: 'Un resumen de perfil profesional no puede ser demasiado corto', value: 200}
+                                    })}
+                                >
+
+                                </textarea>
+                                <p className="text-xs text-error">{errors.resume && errors.resume.message}</p>
+                            </fieldset>
+                        </section>
+                        <button className="btn btn-warning" type="button" onClick={() => validate("personalData")}>Continuar</button>
+                    </section>
+                }
+
+                {
+                    actualPhase === 1
+                    &&
+                    <section className="bg-base-100 rounded p-2">
+                        <section className="flex flex-col items-center gap-x-5">
+                            <HeaderWithContentComponent
+                            title="Educación"
+                            content="Añade tus datos académicos"
+                            level={3}
+                            positionText="start"
                             >
+                                <button className="btn btn-success" type="button" onClick={() => append({graduationDate: '', institutionName: '', titleName: '', type: 'curso'})}>Añadir nuevo</button>
+                            </HeaderWithContentComponent>
+                        </section>
 
-                            </textarea>
-                            <p className="text-xs text-error">{errors.resume && errors.resume.message}</p>
-                        </fieldset>
+                        <section className="h-119 overflow-y-auto flex flex-col gap-y-3 py-2">
+                            <p className="text-error text-xs">{errors.education?.message}</p>
+                            {
+                                fields.length === 0 
+                                    &&
+                                    <div className="flex h-full items-center justify-center">
+                                        <p>Aún no has añadido nada.</p>
+                                    </div>
+                            }
+                            {fields.map((education, index) => {
+                                
+                                return (
+                                    <EducationElementComponent trigger={trigger} control={control} errors={errors} index={index} register={register} key={education.id} onDeleteEducationElement={handleDeleteEducationElement}/>
+                                )
+                            })}
+                        </section>
+                        <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
+                        <button className="btn btn-warning" type="button" onClick={() => validate("educationData")}>Continuar</button>
                     </section>
-                </section>
+                }
 
-                <section className="bg-base-100 rounded p-2">
-                    <section className="flex flex-col items-center gap-x-5">
-                        <HeaderWithContentComponent
-                        title="Educación"
-                        content="Añade tus datos académicos"
-                        level={3}
-                        positionText="start"
-                        >
-                            <button className="btn btn-success" type="button" onClick={() => append({graduationDate: '', institutionName: '', titleName: '', type: 'curso'})}>Añadir nuevo</button>
-                        </HeaderWithContentComponent>
-                    </section>
-
-                    <section className="h-119 overflow-y-auto flex flex-col gap-y-3 py-2">
-                        <p className="text-error text-xs">{errors.education?.message}</p>
-                        {
-                            fields.length === 0 
-                                &&
-                                <div className="flex h-full items-center justify-center">
-                                    <p>Aún no has añadido nada.</p>
-                                </div>
-                        }
-                        {fields.map((education, index) => {
+                {
+                    actualPhase === 2
+                    &&
+                    <section className="flex justify-center">
+                        <div className="w-[80%] bg-base-100 p-4 rounded">
+                            <HeaderWithContentComponent
+                                title="Experiencia laboral"
+                                content="Añade tu experiencia laboral"
+                                level={3}
+                                positionText="start"
+                                className="mb-4"
+                            >
+                                <button type="button" className="btn btn-success" onClick={() => appendWorkExperience({achievements: [], companyName: '', occupation: '', startDate: ''})} >Añadir experiencia laboral</button>
+                            </HeaderWithContentComponent>
                             
-                            return (
-                                <EducationElementComponent trigger={trigger} control={control} errors={errors} index={index} register={register} key={education.id} onDeleteEducationElement={handleDeleteEducationElement}/>
-                            )
-                        })}
+                            
+                            <section className="flex flex-col gap-3 rounded">
+                                {errors.workExperience && <p className="text-error text-xs col-span-2">{errors.workExperience.message}</p>}
+                                {workExperienceFields.length === 0 && <p className="w-full text-center col-span-2">Sin experiencias laborales añadidas</p>}
+                                {workExperienceFields.map((experience, index) => {
+                                    return (
+                                        <WorkExperienceElementComponent trigger={trigger} control={control} errors={errors} index={index} onDeleteWorkExperienceElement={handleDeleteWorkExperienceElement} register={register} key={experience.id}/>
+                                    )
+                                })}
+                            </section>
+                            <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
+                            <button className="btn btn-warning" type="button" onClick={() => validate("laboralData")}>Continuar</button>
+                        </div>
                     </section>
-                </section>
+                }
+
+                {
+                    actualPhase === 3
+                    &&
+                    <section>
+                        <HeaderWithContentComponent level={2} title="Ya casi hemos terminado" content="Selecciona el formato a generar y confirma para generar tu CV (:"/>
+                        <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
+                    </section>
+                }
             </div>
-            <section className="flex justify-center">
-                <div className="w-[80%] bg-base-100 p-4 rounded">
-                    <HeaderWithContentComponent
-                        title="Experiencia laboral"
-                        content="Añade tu experiencia laboral"
-                        level={3}
-                        positionText="start"
-                        className="mb-4"
-                    >
-                        <button type="button" className="btn btn-success" onClick={() => appendWorkExperience({achievements: [], companyName: '', occupation: '', startDate: ''})} >Añadir experiencia laboral</button>
-                    </HeaderWithContentComponent>
-                    
-                    
-                    <section className="flex flex-col gap-3 rounded">
-                        {errors.workExperience && <p className="text-error text-xs col-span-2">{errors.workExperience.message}</p>}
-                        {workExperienceFields.length === 0 && <p className="w-full text-center col-span-2">Sin experiencias laborales añadidas</p>}
-                        {workExperienceFields.map((experience, index) => {
-                            return (
-                                <WorkExperienceElementComponent trigger={trigger} control={control} errors={errors} index={index} onDeleteWorkExperienceElement={handleDeleteWorkExperienceElement} register={register} key={experience.id}/>
-                            )
-                        })}
-                    </section>
-                </div>
-            </section>
-            <button className="btn btn-info" type="submit">Generar CV</button>
+            {/* <button className="btn btn-info" type="submit">Generar CV</button> */}
         </form>
     );
 }
