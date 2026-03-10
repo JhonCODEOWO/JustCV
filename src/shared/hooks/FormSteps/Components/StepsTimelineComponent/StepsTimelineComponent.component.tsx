@@ -1,37 +1,35 @@
 import HeaderComponent from "../../../../components/HeaderComponent/HeaderComponent.component";
-import { useSteps } from "../../FormSteps";
 import type { Step } from "../../interfaces/StepInterface.interface";
+import StepComponent from "../StepComponent/StepComponent.component";
 
 interface StepsTimelineComponentProps {
     steps: Step[],
+    actualPhase: number,
+    isValidInTimeLine: (index: number) => boolean;
+    isStartPointer: (index: number) => boolean;
+    isEndPointer: (index: number) => boolean;
 }
 
-function StepsTimelineComponent({steps}: StepsTimelineComponentProps) {
-    const {actualPhase, isEndPointer, isStartPointer, isValidInTimeLine, nextPhase, prevPhase, totalPhases} = useSteps(steps);
+/**
+ * Render all steps using the functions of the hook useSteps to work
+ * @notes This is just a render to list all steps with styles based on the progress it does't execute logic.
+ * @param props The component props
+ * @returns 
+ */
+function StepsTimelineComponent({steps, actualPhase, isValidInTimeLine, isStartPointer, isEndPointer}: StepsTimelineComponentProps) {
     return ( 
         <>
-            <HeaderComponent level={4} >
+            <HeaderComponent level={4}>
                     Progreso actual
-                </HeaderComponent>
-                <button className="btn btn-info" onClick={nextPhase}>Avanzar paso</button>
-                <button className="btn btn-info" onClick={prevPhase}>Retroceder paso</button>
-                <ul className="timeline">
-                    {totalPhases
-                    .map(
+            </HeaderComponent>
+            <ul className="timeline">
+                {
+                    steps.map(
                         ({title, id}, index) => 
-                            <li key={id}>
-                                {/* Renderize if the element is not a initial element of the array and paint the hr line if the index is valid based on the actualPhase set */}
-                                {!isStartPointer(index) && <hr className={isValidInTimeLine(index)? 'bg-primary':'bg-base-200'}/>}
-                                <div className="timeline-start timeline-box">{title}</div>
-                                <div className="timeline-middle">
-                                    <div className={`h-4 w-4 rounded ${(isValidInTimeLine(index) && index != actualPhase? 'bg-success': 'bg-warning')}`}></div>
-                                </div>
-                                {/* Renderize if the element is not a initial element of the array and paint the hr line if the index is valid based on the actualPhase set */}
-                                {!isEndPointer(index) && <hr className={isValidInTimeLine(index + 1)? 'bg-primary':'bg-base-200'}/>}
-                            </li>
-                        )
-                    }
-                </ul>
+                            <StepComponent actualStep={actualPhase} index={index} isEndPointer={isEndPointer} isStartPointer={isStartPointer} isValidInTimeLine={isValidInTimeLine} title={title} key={id}/>
+                    )
+                }
+            </ul>
         </>
      );
 }
