@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import CardComponent from "../../shared/components/CardComponent/CardComponent.component";
 import HeaderComponent from "../../shared/components/HeaderComponent/HeaderComponent.component";
 import HeroComponent from "../../shared/components/HeroComponent/HeroComponent.component";
+import header from "../../assets/background-main-hero.jpg"
 
 function IndexPageComponent() {
     const navigator = useNavigate();
@@ -14,7 +15,7 @@ function IndexPageComponent() {
             <HeroComponent 
                 title="¡Solo CVealizalo!" 
                 heroContent="Con JustCV olvídate de investigar, diseñar, arrastrar elementos y todas las tareas pesadas de crear un CV con formatos específicos, solo coloca tu información y listo"
-                url_img="https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp"
+                url_img={header}
                 onStartNowClick={handleStartNowClick}
             />
 
