@@ -114,12 +114,12 @@ function CreateCvForm() {
     
     return (
         <form onSubmit={(event) => onSubmit(event)} className="flex flex-col gap-y-6">
-            <div className="gap-x-4 flex items-start h-[calc(100dvh-64px)]">
-                    <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep}/>
+            <div className="gap-x-4 flex items-start h-[calc(100dvh-64px)] p-3">
+                    <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
                 {
                     actualPhase === 0
                         &&
-                    <section className="bg-base-100 p-5 rounded flex-1">
+                    <section className="bg-base-100 p-5 rounded flex-1 h-full">
                         <HeaderWithContentComponent
                             title="Datos personales"
                             content="Ingresa tus datos personales"
@@ -247,7 +247,7 @@ function CreateCvForm() {
                 {
                     actualPhase === 1
                     &&
-                    <section className="bg-base-100 rounded p-2 flex-1">
+                    <section className="bg-base-100 rounded p-2 flex-1 h-full">
                         <section className="flex flex-col items-center gap-x-5">
                             <HeaderWithContentComponent
                             title="Educación"
@@ -283,7 +283,7 @@ function CreateCvForm() {
                 {
                     actualPhase === 2
                     &&
-                    <section className="flex justify-center flex-1">
+                    <section className="flex justify-center flex-1 h-full">
                         <div className="bg-base-100 p-4 rounded w-full">
                             <HeaderWithContentComponent
                                 title="Experiencia laboral"

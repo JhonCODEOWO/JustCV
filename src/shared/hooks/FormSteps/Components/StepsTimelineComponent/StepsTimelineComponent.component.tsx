@@ -9,6 +9,7 @@ interface StepsTimelineComponentProps {
     actualPhase: number,
     onStepWanted: (index: number, step: Step) => void;
     style?: 'steps-vertical' | 'steps-horizontal';
+    className?: string;
 }
 
 /**
@@ -17,10 +18,10 @@ interface StepsTimelineComponentProps {
  * @param props The component props
  * @returns 
  */
-function StepsTimelineComponent({steps, actualPhase, title = 'Progreso Actual', onStepWanted, style = 'steps-vertical'}: StepsTimelineComponentProps) {
+function StepsTimelineComponent({steps, className = '', actualPhase, title = 'Progreso Actual', onStepWanted, style = 'steps-vertical'}: StepsTimelineComponentProps) {
     
     return ( 
-        <div className="bg-base-100 rounded p-3">
+        <div className={`bg-base-100 rounded p-3 ${className}`}>
             <HeaderComponent level={4}className="text-center">
                     {title}
             </HeaderComponent>
