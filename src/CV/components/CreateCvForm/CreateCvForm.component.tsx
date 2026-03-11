@@ -9,12 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { CreateCvInterface } from "../../interfaces/CreateCVInterface";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
+import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
 
 export type CreateCvFormBody = z.infer<typeof CreateCVSchema>;
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
 
 function CreateCvForm() {
-    const {actualPhase, getActualStep, isEndPointer, isStartPointer, isValidInTimeLine, nextPhase, prevPhase, totalPhases} = useSteps([
+    const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore} = useSteps([
         {
             id: 'personalData',
             title: 'Datos personales'
@@ -48,6 +49,16 @@ function CreateCvForm() {
         resolver: zodResolver(CreateCVSchema)
     });
 
+    /**
+     * Field values separated by a ID
+     */
+    const fieldsByStep: Record<StepID, FieldPath<CreateCvFormBody>[]> = {
+            'personalData': ["fullname", "email", "phoneNumber", "profesionalLinks", "residence", "resume"],
+            educationData: ["education"],
+            laboralData: ["workExperience"],
+            finalPhase: []
+    }
+
     const {append, remove, fields} = useFieldArray({control, name: 'education'});
     const {append: appendWorkExperience, remove: removeWorkExperience, fields: workExperienceFields} = useFieldArray({control, name: 'workExperience'});
 
@@ -60,14 +71,7 @@ function CreateCvForm() {
     }
 
     const validate = async (stepID: StepID) => {
-        const values: Record<StepID, FieldPath<CreateCvFormBody>[]> = {
-            'personalData': ["fullname", "email", "phoneNumber", "profesionalLinks", "residence", "resume"],
-            educationData: ["education"],
-            laboralData: ["workExperience"],
-            finalPhase: []
-        }
-        const valid = await trigger(values[stepID]);
-        console.log(errors);
+        const valid = await trigger(fieldsByStep[stepID]);
         if(!valid) return;
         nextPhase();
     }
@@ -87,11 +91,31 @@ function CreateCvForm() {
 
         console.log(body);
     }
+
+    /**
+     * Handle the wanted step function and evaluate every step before the index request if any has a error then
+     * the go next operation can't be executed.
+     * @param requestedIndex The index of the element request to go.
+     * @param step The step element object requested.
+     * @returns void
+     */
+    const handleWantedStep = async (requestedIndex: number, step: Step) => {
+        const toEvaluate = elementsBefore(requestedIndex);
+        const toValidate: Promise<boolean>[] = [];
+
+        toEvaluate.forEach(step => {
+            toValidate.push(trigger(fieldsByStep[step.id as StepID]));
+        });
+        
+        const result: boolean[] = await Promise.all(toValidate);
+        if(result.includes(false)) return;
+        goTo(requestedIndex);
+    }
     
     return (
         <form onSubmit={(event) => onSubmit(event)} className="flex flex-col gap-y-6">
             <div className="gap-x-4 items-start w-1/2 mx-auto my-0">
-                <StepsTimelineComponent actualPhase={actualPhase} isEndPointer={isEndPointer} isStartPointer={isStartPointer} isValidInTimeLine={isValidInTimeLine} steps={totalPhases}/>
+                <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep}/>
 
                 {
                     actualPhase === 0

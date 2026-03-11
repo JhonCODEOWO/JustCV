@@ -1,13 +1,13 @@
 import HeaderComponent from "../../../../components/HeaderComponent/HeaderComponent.component";
+import { isEndPointer } from "../../Helpers/StepsHelpers";
 import type { Step } from "../../interfaces/StepInterface.interface";
 import StepComponent from "../StepComponent/StepComponent.component";
 
 interface StepsTimelineComponentProps {
+    title?: string;
     steps: Step[],
     actualPhase: number,
-    isValidInTimeLine: (index: number) => boolean;
-    isStartPointer: (index: number) => boolean;
-    isEndPointer: (index: number) => boolean;
+    onStepWanted: (index: number, step: Step) => void;
 }
 
 /**
@@ -16,17 +16,24 @@ interface StepsTimelineComponentProps {
  * @param props The component props
  * @returns 
  */
-function StepsTimelineComponent({steps, actualPhase, isValidInTimeLine, isStartPointer, isEndPointer}: StepsTimelineComponentProps) {
+function StepsTimelineComponent({steps, actualPhase, title = 'Progreso Actual', onStepWanted}: StepsTimelineComponentProps) {
     return ( 
         <>
-            <HeaderComponent level={4}>
-                    Progreso actual
+            <HeaderComponent level={4}className="text-center">
+                    {title}
             </HeaderComponent>
             <ul className="timeline">
                 {
                     steps.map(
                         ({title, id}, index) => 
-                            <StepComponent actualStep={actualPhase} index={index} isEndPointer={isEndPointer} isStartPointer={isStartPointer} isValidInTimeLine={isValidInTimeLine} title={title} key={id}/>
+                            <StepComponent 
+                                currentStepIndex={actualPhase} 
+                                index={index} 
+                                title={title} 
+                                key={id}
+                                isLastElement={isEndPointer(index, steps.length)}
+                                onStepClick={(index) => onStepWanted(index, steps[index])}
+                            />
                     )
                 }
             </ul>
