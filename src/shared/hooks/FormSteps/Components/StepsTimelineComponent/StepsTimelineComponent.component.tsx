@@ -8,7 +8,7 @@ interface StepsTimelineComponentProps {
     steps: Step[],
     actualPhase: number,
     onStepWanted: (index: number, step: Step) => void;
-    style?: 'timeline-vertical' | 'timeline-horizontal';
+    style?: 'steps-vertical' | 'steps-horizontal';
 }
 
 /**
@@ -17,14 +17,14 @@ interface StepsTimelineComponentProps {
  * @param props The component props
  * @returns 
  */
-function StepsTimelineComponent({steps, actualPhase, title = 'Progreso Actual', onStepWanted, style = 'timeline-vertical'}: StepsTimelineComponentProps) {
+function StepsTimelineComponent({steps, actualPhase, title = 'Progreso Actual', onStepWanted, style = 'steps-vertical'}: StepsTimelineComponentProps) {
     
     return ( 
-        <>
+        <div className="bg-base-100 rounded p-3">
             <HeaderComponent level={4}className="text-center">
                     {title}
             </HeaderComponent>
-            <ul className={`timeline ${style}`}>
+            <ul className={`steps ${style}`}>
                 {
                     steps.map(
                         ({title, id}, index) => 
@@ -39,7 +39,7 @@ function StepsTimelineComponent({steps, actualPhase, title = 'Progreso Actual', 
                     )
                 }
             </ul>
-        </>
+        </div>
      );
 }
 

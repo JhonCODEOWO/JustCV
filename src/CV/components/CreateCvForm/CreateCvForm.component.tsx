@@ -114,20 +114,20 @@ function CreateCvForm() {
     
     return (
         <form onSubmit={(event) => onSubmit(event)} className="flex flex-col gap-y-6">
-            <div className="gap-x-4 items-start w-1/2 mx-auto my-0">
-                <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep}/>
+            <div className="gap-x-4 flex items-start">
+                    <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep}/>
 
                 {
                     actualPhase === 0
                         &&
-                    <section className="bg-base-100 p-5 rounded">
+                    <section className="bg-base-100 p-5 rounded flex-1">
                         <HeaderWithContentComponent
                             title="Datos personales"
                             content="Ingresa tus datos personales"
                             level={3}
                         />
                         <section>
-                            <div className="grid grid-cols-2">
+                            <div className="grid grid-cols-3">
                                 <InputComponent<CreateCvFormBody> 
                                 errors={errors} 
                                 label="Nombre completo" 
@@ -248,7 +248,7 @@ function CreateCvForm() {
                 {
                     actualPhase === 1
                     &&
-                    <section className="bg-base-100 rounded p-2">
+                    <section className="bg-base-100 rounded p-2 flex-1">
                         <section className="flex flex-col items-center gap-x-5">
                             <HeaderWithContentComponent
                             title="Educación"
@@ -284,8 +284,8 @@ function CreateCvForm() {
                 {
                     actualPhase === 2
                     &&
-                    <section className="flex justify-center">
-                        <div className="w-[80%] bg-base-100 p-4 rounded">
+                    <section className="flex justify-center flex-1">
+                        <div className="bg-base-100 p-4 rounded w-full">
                             <HeaderWithContentComponent
                                 title="Experiencia laboral"
                                 content="Añade tu experiencia laboral"
