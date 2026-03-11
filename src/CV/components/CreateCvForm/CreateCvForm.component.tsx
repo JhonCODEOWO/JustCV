@@ -114,9 +114,8 @@ function CreateCvForm() {
     
     return (
         <form onSubmit={(event) => onSubmit(event)} className="flex flex-col gap-y-6">
-            <div className="gap-x-4 flex items-start">
+            <div className="gap-x-4 flex items-start h-[calc(100dvh-64px)]">
                     <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep}/>
-
                 {
                     actualPhase === 0
                         &&
