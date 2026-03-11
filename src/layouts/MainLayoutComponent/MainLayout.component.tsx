@@ -4,7 +4,7 @@ import FooterComponent from "../../shared/components/FooterComponent/FooterCompo
 function MainLayoutComponent() {
     return (
         <div className="h-screen">
-            <div className="navbar justify-between bg-neutral text-neutral-content">
+            <div className="navbar justify-between bg-base-100 text-neutral-content">
                 <Link to={''} className="flex flex-col">
                     <p className="text-base font-bold">JustCV</p>
                     <p className="text-xs">Haciendo las cosas fáciles</p>

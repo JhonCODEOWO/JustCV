@@ -1,6 +1,6 @@
 function FooterComponent() {
     return (
-        <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10">
+        <footer className="footer sm:footer-horizontal bg-base-100 text-neutral-content p-10">
             <aside className="flex flex-col">
                 <img src="favicon.ico" alt="" className="rounded-full"/>
                 <p>

@@ -2,7 +2,7 @@ import CreateCvForm from "../../CV/components/CreateCvForm/CreateCvForm.componen
 
 function CreatingCVPageComponent() {
     return ( 
-        <section className="bg-base-300">
+        <section>
             <CreateCvForm/>
         </section>
      );
