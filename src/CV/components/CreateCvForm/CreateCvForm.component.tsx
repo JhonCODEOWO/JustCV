@@ -9,11 +9,13 @@ import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
 import { createCv } from "../../requests/CVRequests";
+import { useState } from "react";
 
 
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
 
 function CreateCvForm() {
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
     const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore} = useSteps([
         {
             id: 'personalData',
@@ -31,6 +33,10 @@ function CreateCvForm() {
             id: 'finalPhase',
             title: 'Finalizar proceso'
         },
+        {
+            id: 'pdfGenerated',
+            title: 'Tu PDF está listo'
+        }
     ]);
     
     const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues} = useForm<CreateCvFormBody>({
@@ -83,7 +89,16 @@ function CreateCvForm() {
         const body = CreateCVSanitized.parse(value);
 
         const {data} = await createCv(body);
-        console.log(data);
+        const url = URL.createObjectURL(data);
+        setPdfUrl(url);
+        goTo(4);
+    }
+
+    const downloadPDF = () => {
+        const a = document.createElement('a');
+        a.href = pdfUrl ?? '';
+        a.download = `${Date.now()}.pdf`;
+        a.click();
     }
 
     /**
@@ -315,8 +330,27 @@ function CreateCvForm() {
                     &&
                     <section>
                         <HeaderWithContentComponent level={2} title="Ya casi hemos terminado" content="Selecciona el formato a generar y confirma para generar tu CV (:"/>
-                        <button type="submit">Enviar información</button>
-                        <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
+                        <section>
+                            <button type="submit">Generar CV</button>
+                            <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
+                        </section>
+                    </section>
+                }
+
+                {
+                    actualPhase === 4
+                    &&
+                    <section>
+                        <HeaderWithContentComponent level={2} title="CV Generado correctamente" content="Descarga tu CV o guarda el diseño."/>
+                        {
+                            pdfUrl
+                            &&
+                            <iframe src={pdfUrl} className="w-full h-[500px]"></iframe>
+                        }
+                        <section>
+                            <button type="submit" className="btn btn-success" onClick={downloadPDF}>Descargar</button>
+                            {/* <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button> */}
+                        </section>
                     </section>
                 }
             </div>
