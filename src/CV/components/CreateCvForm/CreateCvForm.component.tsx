@@ -283,7 +283,7 @@ function CreateCvForm() {
                 {
                     actualPhase === 2
                     &&
-                    <section className="flex justify-center flex-1 h-full">
+                    <section className="flex justify-center flex-1 h-full overflow-auto">
                         <div className="bg-base-100 p-4 rounded w-full">
                             <HeaderWithContentComponent
                                 title="Experiencia laboral"
