@@ -3,15 +3,14 @@ import InputComponent from "../../../shared/components/InputComponent/input.comp
 import EducationElementComponent from "./components/EducationElement/EducationElement.component";
 import WorkExperienceElementComponent from "./components/WorkExperienceElement/WorkExperienceElement.component";
 import HeaderWithContentComponent from "../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
-import { CreateCVSchema } from "./schemas/CreateCVSchema";
-import { z} from "zod"
+import { CreateCVSanitized, CreateCVSchema, type CreateCvFormBody } from "./schemas/CreateCVSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { CreateCvInterface } from "../../interfaces/CreateCVInterface";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
+import { createCv } from "../../resquests/CVRequests";
 
-export type CreateCvFormBody = z.infer<typeof CreateCVSchema>;
+
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
 
 function CreateCvForm() {
@@ -42,9 +41,9 @@ function CreateCvForm() {
             phoneNumber: `7299353872`,
             resume: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit pulvinar odio, vel lacinia odio. Morbi maximus nisi in molestie ornare. Etiam in arcu enim. Curabitur non augue neque. Ut. `,
             education: [{graduationDate: '01-09-2002', institutionName: 'ITSSNP', titleName: 'Ing. Informática', type: 'titulo'}],
-            profesionalLinks: {github: '', linkedIn: '', portfolioWeb: ''},
+            profesionalLinks: {github: '', linkedIn: 'https://www.linkedin.com/in/jonathan-juarez-valera/', portfolioWeb: ''},
             residence: {city: 'Zacatlán', country: 'Puebla'},
-            workExperience: [{achievements: [{description: 'something'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}]
+            workExperience: [{achievements: [{description: 'nose'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}]
         },
         resolver: zodResolver(CreateCVSchema)
     });
@@ -81,15 +80,10 @@ function CreateCvForm() {
         const result = await trigger();
         if(!result) return;
         const value = getValues();
+        const body = CreateCVSanitized.parse(value);
 
-        const links = Object.fromEntries(Object.entries(value.profesionalLinks).filter(([_, v]) => v != ''))
-        
-        const body: CreateCvInterface = {
-            ...value,
-            profesionalLinks: links
-        }
-
-        console.log(body);
+        const {data} = await createCv(body);
+        console.log(data);
     }
 
     /**
@@ -212,6 +206,11 @@ function CreateCvForm() {
                                     label="LinkedIn" 
                                     name="profesionalLinks.linkedIn" 
                                     register={register} 
+                                    validations={
+                                        {
+                                            required: true
+                                        }
+                                    }
                                     type="text"
                                 />
                                 <InputComponent<CreateCvFormBody> 
@@ -316,6 +315,7 @@ function CreateCvForm() {
                     &&
                     <section>
                         <HeaderWithContentComponent level={2} title="Ya casi hemos terminado" content="Selecciona el formato a generar y confirma para generar tu CV (:"/>
+                        <button type="submit">Enviar información</button>
                         <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
                     </section>
                 }

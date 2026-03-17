@@ -1,3 +1,4 @@
+import { fields } from "@hookform/resolvers/ajv/src/__tests__/__fixtures__/data.js";
 import * as z from "zod"; 
 
 const Education = z.object({
@@ -9,7 +10,7 @@ const Education = z.object({
 
 const ProfesionalLinks = z.object({
     github: z.httpUrl().or(z.literal('')),
-    linkedIn: z.httpUrl().optional().or(z.literal('')),
+    linkedIn: z.httpUrl({error: 'Escribe una URL válida.'}),
     portfolioWeb: z.httpUrl().optional().or(z.literal('')),
 })
 
@@ -38,5 +39,21 @@ export const CreateCVSchema = z.object({
     education: z.array(Education).min(1, 'Debes agregar al menos un elemento de educación a tu CV.'),
     profesionalLinks: ProfesionalLinks,
     residence: Residence,
-    workExperience: z.array(WorkExperience).min(1, 'No puedes crear un CV sin al menos una experiencia laboral.'),
+    workExperience: z.array(WorkExperience).min(1, 'No puedes crear un CV sin al menos una experiencia laboral.')
 })
+
+export const CreateCVSanitized = CreateCVSchema.transform((fields) => ({
+    ...fields,
+    profesionalLinks: Object.fromEntries(Object.entries(fields.profesionalLinks).filter(([k,v]) => v!= '')),
+    workExperience: fields.workExperience.map((workExp) => {
+        const [d,m,y] = workExp.startDate.split('-');
+        return {
+            ...workExp,
+            achievements: workExp.achievements.map(a => a.description),
+            startDate: `${y}-${m}-${d}`
+        }
+    })
+}))
+
+export type CreateCvFormBody = z.infer<typeof CreateCVSchema>;
+export type CreateCvFormOutput = z.output<typeof CreateCVSanitized>;
