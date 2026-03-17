@@ -1,4 +1,3 @@
-import { fields } from "@hookform/resolvers/ajv/src/__tests__/__fixtures__/data.js";
 import * as z from "zod"; 
 
 const Education = z.object({
@@ -42,6 +41,10 @@ export const CreateCVSchema = z.object({
     workExperience: z.array(WorkExperience).min(1, 'No puedes crear un CV sin al menos una experiencia laboral.')
 })
 
+/**
+ * A const with a object transformed based on the main schema 
+ * to generate the body required in the backend for a success response
+ */
 export const CreateCVSanitized = CreateCVSchema.transform((fields) => ({
     ...fields,
     profesionalLinks: Object.fromEntries(Object.entries(fields.profesionalLinks).filter(([k,v]) => v!= '')),

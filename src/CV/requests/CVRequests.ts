@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { CreateCvFormBody, CreateCvFormOutput } from "../components/CreateCvForm/schemas/CreateCVSchema";
+import type { CreateCvFormOutput } from "../components/CreateCvForm/schemas/CreateCVSchema";
 
 export function createCv(body: CreateCvFormOutput) {
     console.log(import.meta.env.VITE_API_BASE_URL);

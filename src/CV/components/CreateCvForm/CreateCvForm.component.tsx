@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
-import { createCv } from "../../resquests/CVRequests";
+import { createCv } from "../../requests/CVRequests";
 
 
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
