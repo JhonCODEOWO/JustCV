@@ -8,10 +8,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
-import { createCv } from "../../requests/CVRequests";
-import { useState } from "react";
-import { getDefaultImage } from "../../../shared/utils/getDefaultImage";
 import SelectComponent, { type SelectOpt } from "../../../shared/components/SelectComponent/SelectComponent";
+import { useNavigate } from "react-router-dom";
+import { useCvsContext } from "../../contexts/CvsContext/hooks/CvsContextHook";
 
 
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
@@ -32,7 +31,8 @@ const formatValues: SelectOpt[] = [
 ]
 
 function CreateCvForm() {
-    const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+    const navigate = useNavigate();
+    const {addCv} = useCvsContext();
     const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore} = useSteps([
         {
             id: 'personalData',
@@ -49,10 +49,6 @@ function CreateCvForm() {
         {
             id: 'finalPhase',
             title: 'Finalizar proceso'
-        },
-        {
-            id: 'pdfGenerated',
-            title: 'Tu PDF está listo'
         }
     ]);
     
@@ -106,10 +102,8 @@ function CreateCvForm() {
         const value = getValues();
         const body = CreateCVSanitized.parse(value);
 
-        const {data} = await createCv(body);
-        const url = URL.createObjectURL(data);
-        setPdfUrl(url);
-        goTo(4);
+        addCv(value);
+        navigate('/home');
     }
 
     const downloadPDF = () => {
@@ -352,23 +346,6 @@ function CreateCvForm() {
                         <section>
                             <button type="submit">Generar CV</button>
                             <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
-                        </section>
-                    </section>
-                }
-
-                {
-                    actualPhase === 4
-                    &&
-                    <section>
-                        <HeaderWithContentComponent level={2} title="CV Generado correctamente" content="Descarga tu CV o guarda el diseño."/>
-                        {
-                            pdfUrl
-                            &&
-                            <iframe src={pdfUrl} className="w-full h-[500px]"></iframe>
-                        }
-                        <section>
-                            <button type="submit" className="btn btn-success" onClick={downloadPDF}>Descargar</button>
-                            {/* <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button> */}
                         </section>
                     </section>
                 }
