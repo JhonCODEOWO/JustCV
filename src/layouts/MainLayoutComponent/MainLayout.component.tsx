@@ -15,7 +15,7 @@ function MainLayoutComponent() {
                     </Link>
                 </nav>
             </div>
-            <div className="min-h-[calc(100dvh-64px-160px)]">
+            <div className="h-[calc(100dvh-64px-160px)]">
                 <Outlet/>
             </div>
             <FooterComponent/>
