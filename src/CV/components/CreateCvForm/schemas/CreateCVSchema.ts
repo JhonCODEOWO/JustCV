@@ -49,11 +49,9 @@ export const CreateCVSanitized = CreateCVSchema.transform((fields) => ({
     ...fields,
     profesionalLinks: Object.fromEntries(Object.entries(fields.profesionalLinks).filter(([k,v]) => v!= '')),
     workExperience: fields.workExperience.map((workExp) => {
-        const [d,m,y] = workExp.startDate.split('-');
         return {
             ...workExp,
             achievements: workExp.achievements.map(a => a.description),
-            startDate: `${y}-${m}-${d}`
         }
     })
 }))
