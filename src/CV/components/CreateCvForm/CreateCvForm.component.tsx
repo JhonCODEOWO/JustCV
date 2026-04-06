@@ -10,9 +10,26 @@ import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/S
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
 import { createCv } from "../../requests/CVRequests";
 import { useState } from "react";
+import { getDefaultImage } from "../../../shared/utils/getDefaultImage";
+import SelectComponent, { type SelectOpt } from "../../../shared/components/SelectComponent/SelectComponent";
 
 
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
+
+const formatValues: SelectOpt[] = [
+    {
+        label: 'Harvard',
+        value: 'Harvard',
+    },
+    {
+        label: 'Ats',
+        value: 'Ats',
+    },
+    {
+        label: 'Moderno',
+        value: 'Modern',
+    }
+]
 
 function CreateCvForm() {
     const [pdfUrl, setPdfUrl] = useState<string | null>(null);
@@ -49,7 +66,8 @@ function CreateCvForm() {
             education: [{graduationDate: '01-09-2002', institutionName: 'ITSSNP', titleName: 'Ing. Informática', type: 'titulo'}],
             profesionalLinks: {github: '', linkedIn: 'https://www.linkedin.com/in/jonathan-juarez-valera/', portfolioWeb: ''},
             residence: {city: 'Zacatlán', country: 'Puebla'},
-            workExperience: [{achievements: [{description: 'nose'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}]
+            workExperience: [{achievements: [{description: 'nose'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}],
+            formatType: 'Ats'
         },
         resolver: zodResolver(CreateCVSchema)
     });
@@ -330,6 +348,7 @@ function CreateCvForm() {
                     &&
                     <section>
                         <HeaderWithContentComponent level={2} title="Ya casi hemos terminado" content="Selecciona el formato a generar y confirma para generar tu CV (:"/>
+                        <SelectComponent<CreateCvFormBody> label="Formato a utilizar" name="formatType" register={register} selectOptions={formatValues} isOptional={false} errors={errors}/>
                         <section>
                             <button type="submit">Generar CV</button>
                             <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
