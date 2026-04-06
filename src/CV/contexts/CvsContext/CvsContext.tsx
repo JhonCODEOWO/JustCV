@@ -3,6 +3,7 @@ import type { CreateCvFormBody } from "../../components/CreateCvForm/schemas/Cre
 
 interface CvsContextType {
     cvs: CreateCvFormBody[],
+    itemsLeft: number;
     addCv: (cv: CreateCvFormBody) => void;
     deleteCv: (index: number) => void;
 }

@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 function CvsProviderComponent() {
     const savesLimit = 10;
     const [cvs, setCvs] = useState<CreateCvFormBody[]>(JSON.parse(localStorage.getItem('cvs') ?? "[]"));
+    const itemsLeft = savesLimit - cvs.length;
 
     useEffect(() => {
         localStorage.setItem('cvs', JSON.stringify(cvs));
@@ -22,7 +23,7 @@ function CvsProviderComponent() {
         setCvs(prev => [...prev, cvForm]);
     }
     return (
-        <CvsContext.Provider value={{addCv, deleteCv, cvs}}>
+        <CvsContext.Provider value={{addCv, deleteCv, cvs, itemsLeft}}>
             <Outlet/>
         </CvsContext.Provider>
     );
