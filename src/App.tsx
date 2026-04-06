@@ -5,6 +5,8 @@ import IndexPageComponent from './pages/IndexComponent/index.component'
 import MainLayoutComponent from './layouts/MainLayoutComponent/MainLayout.component'
 import AboutUsComponentPage from './pages/AboutUsPageComponent/AboutUsPageComponent.component'
 import CreatingCVPageComponent from './pages/CreatingCVPageComponent/CreatingCVPageComponent.component'
+import ListCvComponentPage from './CV/pages/ListCvComponentPage.component'
+import CvsProviderComponent from './CV/contexts/CvsContext/wrappers/CvsProviderComponent.component'
 
 function App() {
   return (
@@ -13,7 +15,11 @@ function App() {
         <Route path='' element={<MainLayoutComponent/>}>
             <Route index element={<IndexPageComponent/>}/>
             <Route path='/aboutUs' element={<AboutUsComponentPage/>}/>
-            <Route path='/creating-cv' element={<CreatingCVPageComponent/>}/>
+            {/* Provider of cvs */}
+            <Route element={<CvsProviderComponent/>}>
+              <Route path='/creating-cv' element={<CreatingCVPageComponent/>}/>
+              <Route path='/home' element={<ListCvComponentPage/>}/>
+            </Route>
         </Route>
       </Routes>
     </BrowserRouter>
