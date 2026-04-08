@@ -19,7 +19,7 @@ function SelectComponent<T extends FieldValues>({label, register, name, selectOp
     return (
         <fieldset className="fieldset">
             <legend className="fieldset-legend">{label} {!isOptional && <span className="text-error">*</span>} </legend>
-                <select id={name} {...register(name)} className="select">
+                <select id={name} {...register(name)} className="select w-full">
                     <option disabled>Selecciona una opción</option>
                     {
                         selectOptions.map(({label, value}, index) => <option key={index} value={value}>{label}</option>)
