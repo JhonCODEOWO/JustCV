@@ -39,7 +39,6 @@ export const CreateCVSchema = z.object({
     profesionalLinks: ProfesionalLinks,
     residence: Residence,
     workExperience: z.array(WorkExperience).min(1, 'No puedes crear un CV sin al menos una experiencia laboral.'),
-    formatType: z.enum(['Harvard', 'Modern', 'Ats'], {error: 'Asegúrate de seleccionar un formato válido.'})
 })
 
 /**
