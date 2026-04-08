@@ -2,6 +2,11 @@ import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../../shared/components/HeaderComponent/HeaderComponent.component";
 import CvElementComponent from "../components/CvElementComponent/CvElementComponent";
 import { useCvsContext } from "../contexts/CvsContext/hooks/CvsContextHook";
+import { CreateCVSanitized, type CreateCvFormBody } from "../components/CreateCvForm/schemas/CreateCVSchema";
+import { createCv } from "../requests/CVRequests";
+import type { FormatDownloadTypes } from "../types/format-type-validation.type";
+import { downloadBlobFile } from "../../shared/utils/downloadBlobFile";
+import type { LanguagesAvailable } from "../types/languages-availables-validation.type";
 
 function ListCvComponentPage() {
     const navigation = useNavigate();
@@ -15,6 +20,16 @@ function ListCvComponentPage() {
         deleteCv(index);
     }
 
+    const handleDownloadButton = async (cv: CreateCvFormBody, format: FormatDownloadTypes, language: LanguagesAvailable) => {
+        const output = CreateCVSanitized.parse(cv);
+        const {data} = await createCv(output, undefined, {type: format, language});
+        downloadBlobFile(data, cv.fullname);
+    }
+
+    const handleUpdateFormatButton = (format: string) => {
+        
+    }
+
     return (
         <main className="p-5 relative h-full">
             <div className="mb-3">
@@ -26,7 +41,14 @@ function ListCvComponentPage() {
 
             {
                 cvs.map((cv, index) => 
-                    <CvElementComponent cv={cv} key={index} index={index} onDeleteBtn={handleDeleteButton}/>
+                    <CvElementComponent 
+                        cv={cv} 
+                        key={index} 
+                        index={index} 
+                        onDeleteBtn={handleDeleteButton}
+                        onDownloadBtn={handleDownloadButton}
+                        onUpdateFormat={handleUpdateFormatButton}
+                    />
                 )
             }
 
