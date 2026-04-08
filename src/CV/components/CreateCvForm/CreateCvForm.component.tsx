@@ -342,7 +342,6 @@ function CreateCvForm() {
                     &&
                     <section>
                         <HeaderWithContentComponent level={2} title="Ya casi hemos terminado" content="Selecciona el formato a generar y confirma para generar tu CV (:"/>
-                        <SelectComponent<CreateCvFormBody> label="Formato a utilizar" name="formatType" register={register} selectOptions={formatValues} isOptional={false} errors={errors}/>
                         <section>
                             <button type="submit">Generar CV</button>
                             <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
