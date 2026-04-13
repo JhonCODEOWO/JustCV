@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import FooterComponent from "../../shared/components/FooterComponent/FooterComponent.component";
+import NotificationsListComponent from "../../notifications/components/NotificationsList.component";
 
 function MainLayoutComponent() {
     return (
@@ -18,6 +19,7 @@ function MainLayoutComponent() {
             <div className="h-[calc(100dvh-64px-160px)]">
                 <Outlet/>
             </div>
+            <NotificationsListComponent/>
             <FooterComponent/>
         </div>
     );
