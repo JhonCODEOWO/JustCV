@@ -3,32 +3,16 @@ import InputComponent from "../../../shared/components/InputComponent/input.comp
 import EducationElementComponent from "./components/EducationElement/EducationElement.component";
 import WorkExperienceElementComponent from "./components/WorkExperienceElement/WorkExperienceElement.component";
 import HeaderWithContentComponent from "../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
-import { CreateCVSanitized, CreateCVSchema, type CreateCvFormBody } from "./schemas/CreateCVSchema";
+import { CreateCVSchema, type CreateCvFormBody } from "./schemas/CreateCVSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
-import SelectComponent, { type SelectOpt } from "../../../shared/components/SelectComponent/SelectComponent";
+import { type SelectOpt } from "../../../shared/components/SelectComponent/SelectComponent";
 import { useNavigate } from "react-router-dom";
 import { useCvsContext } from "../../contexts/CvsContext/hooks/CvsContextHook";
 
-
 type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
-
-const formatValues: SelectOpt[] = [
-    {
-        label: 'Harvard',
-        value: 'Harvard',
-    },
-    {
-        label: 'Ats',
-        value: 'Ats',
-    },
-    {
-        label: 'Moderno',
-        value: 'Modern',
-    }
-]
 
 function CreateCvForm() {
     const navigate = useNavigate();
@@ -63,10 +47,11 @@ function CreateCvForm() {
             profesionalLinks: {github: '', linkedIn: 'https://www.linkedin.com/in/jonathan-juarez-valera/', portfolioWeb: ''},
             residence: {city: 'Zacatlán', country: 'Puebla'},
             workExperience: [{achievements: [{description: 'nose'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}],
-            formatType: 'Ats'
         },
         resolver: zodResolver(CreateCVSchema)
     });
+
+    
 
     /**
      * Field values separated by a ID
@@ -100,17 +85,9 @@ function CreateCvForm() {
         const result = await trigger();
         if(!result) return;
         const value = getValues();
-        const body = CreateCVSanitized.parse(value);
 
         addCv(value);
         navigate('/home');
-    }
-
-    const downloadPDF = () => {
-        const a = document.createElement('a');
-        a.href = pdfUrl ?? '';
-        a.download = `${Date.now()}.pdf`;
-        a.click();
     }
 
     /**
