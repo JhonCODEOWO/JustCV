@@ -1,4 +1,6 @@
-import * as z from "zod"; 
+import * as z from "zod";
+
+export const fileList = z.instanceof(FileList);
 
 const Education = z.object({
     titleName: z.string().min(1, 'Es obligatorio colocar el nombre del título'),
@@ -47,7 +49,7 @@ export const CreateCVSchema = z.object({
  */
 export const CreateCVSanitized = CreateCVSchema.transform((fields) => ({
     ...fields,
-    profesionalLinks: Object.fromEntries(Object.entries(fields.profesionalLinks).filter(([k,v]) => v!= '')),
+    profesionalLinks: Object.fromEntries(Object.entries(fields.profesionalLinks).filter(([,v]) => v!= '')),
     workExperience: fields.workExperience.map((workExp) => {
         return {
             ...workExp,
