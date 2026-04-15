@@ -47,7 +47,7 @@ function ModalComponent({children, title, onCloseModal, onAccept, closeLabel = '
                         <h3 className="font-bold text-3xl">{title}</h3>
                         <p>{titleExtraInfo}</p>
                     </div>
-                    <div>
+                    <div className="overflow-y-auto">
                         {children}
                     </div>
                     <div className="mt-auto flex justify-between">
