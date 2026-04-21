@@ -2,15 +2,17 @@ import { useNavigate } from "react-router-dom";
 import HeaderComponent from "../../shared/components/HeaderComponent/HeaderComponent.component";
 import CvElementComponent from "../components/CvElementComponent/CvElementComponent";
 import { useCvsContext } from "../contexts/CvsContext/hooks/CvsContextHook";
-import { CreateCVSanitized, type CreateCvFormBody } from "../components/CreateCvForm/schemas/CreateCVSchema";
+import { CreateCVSanitized } from "../components/CreateCvForm/schemas/CreateCVSchema";
 import { createCv } from "../requests/CVRequests";
-import type { FormatDownloadTypes } from "../types/format-type-validation.type";
 import { downloadBlobFile } from "../../shared/utils/downloadBlobFile";
-import type { LanguagesAvailable } from "../types/languages-availables-validation.type";
+import { useNotificationsContext } from "../../notifications/hooks/useNotificationsContext.hook";
+import type { CvElementDownloadArgsInterface } from "../components/CvElementComponent/interfaces/CvElementDownloadArgsInterface.interface";
+import type { DownloadOptionsElementInterface } from "../components/CvElementComponent/interfaces/DownloadOptionsElementInterface.interface";
 
 function ListCvComponentPage() {
     const navigation = useNavigate();
     const {cvs, deleteCv} = useCvsContext();
+    const {create} = useNotificationsContext();
     
     const onAddButton = () => {
         navigation('/creating-cv');
@@ -18,15 +20,22 @@ function ListCvComponentPage() {
 
     const handleDeleteButton = (index: number) => {
         deleteCv(index);
+        create({content: 'Se ha eliminado el cv correctamente', type: 'success'});
     }
 
-    const handleDownloadButton = async (cv: CreateCvFormBody, format: FormatDownloadTypes, language: LanguagesAvailable) => {
+    const handleDownloadButton = async ({cv, profileImage}: CvElementDownloadArgsInterface, {format, language}: DownloadOptionsElementInterface): Promise<boolean> => {
         const output = CreateCVSanitized.parse(cv);
-        const {data} = await createCv(output, undefined, {type: format, language});
-        downloadBlobFile(data, cv.fullname);
+        try {
+            const {data} = await createCv(output, profileImage, {type: format, language});
+            downloadBlobFile(data, cv.fullname);
+            return true;
+        } catch (error) {
+            create({type: 'error', content: `Ha ocurrido un error al generar y descargar el pdf. ${error}`})
+            return false;
+        }
     }
 
-    const handleUpdateFormatButton = (format: string) => {
+    const handleUpdateFormatButton = () => {
         
     }
 
@@ -47,7 +56,7 @@ function ListCvComponentPage() {
                         index={index} 
                         onDeleteBtn={handleDeleteButton}
                         onDownloadBtn={handleDownloadButton}
-                        onUpdateFormat={handleUpdateFormatButton}
+                        onUpdateCv={handleUpdateFormatButton}
                     />
                 )
             }
