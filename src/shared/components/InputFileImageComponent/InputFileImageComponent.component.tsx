@@ -65,23 +65,31 @@ function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,e
     });
 
     const [hover, setHover] = useState<boolean>(false);
+
+    /** Handle the input file Field Values */
     const imagesSelected: FileList | undefined = watch(name);
 
+    /** state that handle a array of Object Urls */
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
+    /**
+     * Effect that handle navigation states every time the imagesSelected and carouse HTML DOM Ref changes
+     */
     useEffect(() => {
         if(!carousel.current){
-            setCarouselNavigationStates({left: false, right: false});
+            setCarouselNavigationStates({left: true, right: true});
             return;
         } 
 
         const element = carousel.current;
-
         const {viewport, totalScroll} = getScrollValues(element);
-
-        if(viewport < totalScroll) setCarouselNavigationStates({left: true, right: false})
+            
+        if(totalScroll > viewport) setCarouselNavigationStates({left: false, right: false})
     }, [carousel, imagesSelected])
 
+    /**
+     * Effect that apply every Object Url from the FileList and apply them on previewUrls state.
+     */
     useEffect(() => {
         if (!imagesSelected) {
             setPreviewUrls([]);
@@ -138,8 +146,8 @@ function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,e
     return (
         <div className="block w-50">
             <label className="fieldset-legend text-xs">{label}</label>
-            <fieldset className={`fieldset relative rounded h-50 w-full overflow-hidden`} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                {imagesSelected 
+            <fieldset className="fieldset relative rounded h-50 w-full overflow-hidden border border-base-200" onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+                {imagesSelected && imagesSelected.length> 0
                     && 
                     <img src={previewUrls[0]} alt="" className="absolute h-full w-full"/>
                 }
@@ -148,7 +156,7 @@ function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,e
                     <input type="file" {...register(name)} multiple={multipleFiles} className="opacity-0 h-full absolute w-full"/>
             </fieldset>
             {
-                imagesSelected &&
+                (imagesSelected && imagesSelected.length > 0) &&
                 <aside className="flex mt-1 relative items-center">
                     <button className="rounded-full bg-base-100 absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer" disabled={carouselNavigationStates.left} onClick={scrollLeft}> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg>
