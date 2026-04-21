@@ -48,7 +48,7 @@ const languageOptions: SelectOpt[] = [
 function CvElementComponent({ cv, index, onDeleteBtn, onDownloadBtn, onUpdateCv }: CvElementComponentProps) {
     const [downloading ,setDownloading] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
-    const {register, formState: {errors},reset, setError, watch, getValues, trigger} = useForm({
+    const {register, formState: {errors},reset, watch, getValues, trigger} = useForm({
         mode: 'onChange',
         defaultValues: {
             formatType: 'Ats',
@@ -91,7 +91,6 @@ function CvElementComponent({ cv, index, onDeleteBtn, onDownloadBtn, onUpdateCv 
                         !downloading &&
                         <div className="flex gap-x-4">
                             <InputFileImageComponent<FormData>
-                                setError={setError}
                                 maxSize={2}
                                 multipleFiles={false}
                                 errors={errors}
