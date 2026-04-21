@@ -8,13 +8,14 @@ export const DownloadOptions = z.object({
     language: languagesAvailableValidation,
     profileImage: 
         fileList
-        .refine(fileList => fileList.length === 1, {error: 'Solo se admite un archivo.'})
+        .refine(fileList => fileList.length > 0, {error: 'Es necesario que seleccione un archivo.'})
+        .refine(fileList => (fileList.length === 1), {error: 'Solo se admite un archivo.'})
         .superRefine(async (files, ctx) => {
             const file = files[0];
-            
             if(!file) return;
+
+            const mb = file.size / (1024 * 1024);
             const filesValid: string[] = ['image/jpeg'];
-            const image = await createImageBitmap(file);
             
             //Checks if the file exists in the valid formats.
             if(!filesValid.includes(file.type)) 
@@ -22,14 +23,14 @@ export const DownloadOptions = z.object({
                     code: 'custom', 
                     message: `Solo se permiten imágenes con formato: ${filesValid.join(' ')}`
                 })
-    
-            //Check if the dimensions are correct
-            if(!(image.width === 500 && image.height === 500))
+            
+            if(mb > 2)
                 ctx.addIssue({
                     code: 'custom',
-                    message: `Solo se admiten imágenes en formato de 500x500`
+                    message: `No se permiten archivos mayores a 2mb`
                 })
-    }),
+        })
+        ,
 })
 
 export type FormData = z.infer<typeof DownloadOptions>;
