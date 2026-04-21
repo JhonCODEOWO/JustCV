@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type UIEvent } from "react";
-import { get, type FieldErrors, type FieldValues, type Path, type UseFormRegister, type UseFormWatch } from "react-hook-form";
+import { get, type FieldErrors, type FieldValues, type Path, type UseFormRegister, type UseFormSetError, type UseFormWatch } from "react-hook-form";
 
 interface InputFileImageComponentProps<T extends FieldValues> {
     name: Path<T>;
@@ -8,6 +8,8 @@ interface InputFileImageComponentProps<T extends FieldValues> {
     label?: string,
     watch: UseFormWatch<T>
     multipleFiles?: boolean;
+    /** The max size valid for this field (it doesn't validate it represents only a visual alert) */
+    maxSize: number;
 }
 
 interface ScrollValues {
@@ -56,7 +58,17 @@ function elementLimits(element: HTMLDivElement): {leftLimitReached: boolean, rig
     }
 }
 
-function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,errors, label = 'Seleccionar imagen', name, register, watch}: InputFileImageComponentProps<T>) {
+function InputFileImageComponent<T extends FieldValues>(
+    {
+        multipleFiles = false,
+        errors, 
+        label = 'Seleccionar imagen', 
+        name, 
+        register, 
+        watch,
+        maxSize,
+    }: InputFileImageComponentProps<T>) {
+
     const carousel = useRef<HTMLDivElement | null>(null);
     const SCROLL_PX = 100;
     const [carouselNavigationStates, setCarouselNavigationStates] = useState<{right: boolean, left: boolean}>({
@@ -65,7 +77,6 @@ function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,e
     });
 
     const [hover, setHover] = useState<boolean>(false);
-
     /** Handle the input file Field Values */
     const imagesSelected: FileList | undefined = watch(name);
 
@@ -156,7 +167,7 @@ function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,e
                     <input type="file" {...register(name)} multiple={multipleFiles} className="opacity-0 h-full absolute w-full"/>
             </fieldset>
             {
-                (imagesSelected && imagesSelected.length > 0) &&
+                (imagesSelected && imagesSelected.length > 0 && multipleFiles) &&
                 <aside className="flex mt-1 relative items-center">
                     <button className="rounded-full bg-base-100 absolute left-0 top-1/2 -translate-y-1/2 cursor-pointer" disabled={carouselNavigationStates.left} onClick={scrollLeft}> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m14 18l-6-6l6-6l1.4 1.4l-4.6 4.6l4.6 4.6z"/></svg>
@@ -171,7 +182,7 @@ function InputFileImageComponent<T extends FieldValues>({multipleFiles = false,e
             }
             <section className="flex flex-col">
                 {error && <label className="text-error text-xs">{error.message}</label>}
-                <label className="label">Max size 2MB</label>
+                <label className="label text-xs text-info">Tamaño máximo permitido {maxSize} MB</label>
             </section>
         </div>
     );
