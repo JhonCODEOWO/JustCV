@@ -9,6 +9,29 @@ const Education = z.object({
     type: z.enum(['curso', 'titulo'], 'No se admite otro tipo de dato, selecciona curso o título')
 });
 
+const Project = z.object({
+    title: z.string().min(3),
+    description: z.string().min(10),
+    link: z.httpUrl(),
+})
+
+const Skill = z.object({
+    name: z.string().min(4),
+    level: z.number()
+            .refine(value => value > 0 && value <=5, {error: 'No se permiten valores menores a 0 y mayores a 5.'})
+})
+
+const Language = z.object({
+    name: z.string().min(1, {error: 'El nombre del lenguaje es obligatorio.'}),
+    level: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo'])
+})
+
+const Certification = z.object({
+    name: z.string().min(1),
+    institution: z.string().min(1),
+    year: z.string().optional(),
+})
+
 const ProfesionalLinks = z.object({
     github: z.httpUrl().or(z.literal('')),
     linkedIn: z.httpUrl({error: 'Escribe una URL válida.'}),
@@ -41,6 +64,10 @@ export const CreateCVSchema = z.object({
     profesionalLinks: ProfesionalLinks,
     residence: Residence,
     workExperience: z.array(WorkExperience).min(1, 'No puedes crear un CV sin al menos una experiencia laboral.'),
+    projects: z.array(Project).optional(),
+    skills: z.array(Skill).min(1, {error: 'Es necesario que coloques al menos una habilidad.'}),
+    languages: z.array(Language).min(1, {error: 'Coloca mínimo tu idioma nativo.'}),
+    certifications: z.array(Certification),
 })
 
 /**
