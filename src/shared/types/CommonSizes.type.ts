@@ -1,0 +1,1 @@
+export type CommonSizes = 'xs' | 's' | 'm' | 'xl'
