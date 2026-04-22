@@ -20,7 +20,7 @@ const positionClasses: Record<position, string> = {
 function HeaderWithContentComponent({level, children, content, title, className, positionText = 'start'}: HeaderWithContentComponentProps) {
     const globalClasses = 'w-full';
     return (
-        <div className={ `${children != null? 'flex items-center': ''} ${className ?? ''} ${globalClasses}`}>
+        <div className={ `${children != null? 'flex items-center gap-x-3': ''} ${className ?? ''} ${globalClasses}`}>
             <div className={`flex flex-col ${positionClasses[positionText]} flex-1`}>
                 <HeaderComponent level={level}>
                     {title}
