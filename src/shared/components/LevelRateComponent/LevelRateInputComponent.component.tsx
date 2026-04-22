@@ -7,20 +7,24 @@ interface LevelRateInputComponentProps<T extends FieldValues> {
     name: Path<T>,
     rateElements: LevelRateInputValue[];
     errors: FieldErrors<T>
+    label: string;
 }
 
-function LevelRateInputComponent<T extends FieldValues>({control, name, rateElements, errors}: LevelRateInputComponentProps<T>) {
+function LevelRateInputComponent<T extends FieldValues>({control, name, rateElements, errors, label}: LevelRateInputComponentProps<T>) {
   return (
     <Controller
       control={control}
       name={name}
       render={({ field }) => (
-        <LevelRateComponent<T>
-          rateElements={rateElements}
-          field={field}
-          orientation="horizontal"
-          errors={errors}
-        />
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">{label}</legend>
+          <LevelRateComponent<T>
+            rateElements={rateElements}
+            field={field}
+            orientation="horizontal"
+            errors={errors}
+          />
+        </fieldset>
       )}
     />
   );
