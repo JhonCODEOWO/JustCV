@@ -19,7 +19,7 @@ function SelectComponent<T extends FieldValues>({label, register, name, selectOp
     return (
         <fieldset className="fieldset">
             <legend className="fieldset-legend">{label} {!isOptional && <span className="text-error">*</span>} </legend>
-                <select id={name} {...register(name)} className="select w-full">
+                <select id={name} {...register(name)} className={`select outline-0 cursor-pointer w-full border ${error? 'border-error' : 'border-success'}`}>
                     <option disabled>Selecciona una opción</option>
                     {
                         selectOptions.map(({label, value}, index) => <option key={index} value={value}>{label}</option>)

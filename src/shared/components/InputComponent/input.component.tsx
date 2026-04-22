@@ -13,7 +13,7 @@ function InputComponent<T extends FieldValues>({label,type, name, register, erro
     const required: boolean = Object.keys(validations).includes('required');
     const error = get(errors, name);
     const globalInputClasses = 'input outline-0 w-full';
-    const errorClasses = (error)? 'border border-error': '';
+    const errorClasses = (error)? 'border border-error': 'border border-success';
     return (
         <fieldset className="fieldset">
             <legend className="fieldset-legend flex items-center">{label} {required && <p className="label text-error">*</p>}</legend>
