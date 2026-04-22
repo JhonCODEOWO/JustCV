@@ -16,7 +16,7 @@ function MainLayoutComponent() {
                     </Link>
                 </nav>
             </div>
-            <div className="h-[calc(100dvh-64px-160px)]">
+            <div className="h-[calc(100dvh-64px-160px)] overflow-y-auto">
                 <Outlet/>
             </div>
             <NotificationsListComponent/>
