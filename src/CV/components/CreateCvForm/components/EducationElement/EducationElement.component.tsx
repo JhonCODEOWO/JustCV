@@ -1,9 +1,8 @@
 import { get, useWatch, type Control, type FieldErrors, type UseFormRegister, type UseFormTrigger } from "react-hook-form";
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
-import type { CreateCvFormBody } from "../../CreateCvForm.component";
-import HeaderComponent from "../../../../../shared/components/HeaderComponent/HeaderComponent.component";
 import { useState } from "react";
 import EditingContentComponent from "../../../../../shared/components/EditingContentComponent/EditingContentComponent.component";
+import type { CreateCvFormBody } from "../../schemas/CreateCVSchema";
 
 
 
