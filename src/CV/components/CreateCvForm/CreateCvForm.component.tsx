@@ -8,11 +8,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
-import { type SelectOpt } from "../../../shared/components/SelectComponent/SelectComponent";
+import SelectComponent from "../../../shared/components/SelectComponent/SelectComponent";
 import { useNavigate } from "react-router-dom";
 import { useCvsContext } from "../../contexts/CvsContext/hooks/CvsContextHook";
+import LevelRateInputComponent from "../../../shared/components/LevelRateComponent/LevelRateInputComponent.component";
+import ErrorTextComponent from "../../../shared/components/ErrorTextComponent/ErrorTextComponent.component";
+import TextAreaComponent from "../../../shared/components/TextAreaComponent/TextAreaComponent.component";
 
-type StepID = "personalData" | "educationData" | "laboralData" | "finalPhase";
+//TODO: The useSteps hook should retrieve this values
+type StepID = "personalData" | "educationData" | "laboralData" | "skillsLanguage" | "finalPhase" | "projects";
 
 function CreateCvForm() {
     const navigate = useNavigate();
@@ -31,10 +35,41 @@ function CreateCvForm() {
             title: 'Experiencia Laboral'
         },
         {
+            id: 'skillsLanguage',
+            title: 'Idiomas y Habilidades'
+        },
+        {
+            id: 'projects',
+            title: 'Proyectos personales'
+        },
+        {
             id: 'finalPhase',
             title: 'Finalizar proceso'
         }
     ]);
+
+    const rateElements = [
+        {
+            title: '1',
+            value: 1,
+        },
+        {
+            title: '2',
+            value: 2,
+        },
+        {
+            title: '3',
+            value: 3,
+        },
+        {
+            title: '4',
+            value: 4,
+        },
+        {
+            title: '5',
+            value: 5,
+        },
+    ]
     
     const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues} = useForm<CreateCvFormBody>({
         mode: 'onChange',
@@ -60,11 +95,16 @@ function CreateCvForm() {
             'personalData': ["fullname", "email", "phoneNumber", "profesionalLinks", "residence", "resume"],
             educationData: ["education"],
             laboralData: ["workExperience"],
+            skillsLanguage: ["skills", "languages"],
+            projects: ["projects"],
             finalPhase: []
     }
 
     const {append, remove, fields} = useFieldArray({control, name: 'education'});
     const {append: appendWorkExperience, remove: removeWorkExperience, fields: workExperienceFields} = useFieldArray({control, name: 'workExperience'});
+    const {fields: languages, append: appendLanguage, remove: removeLanguage} = useFieldArray({control, name: 'languages'});
+    const {fields: skills, append: appendSkill, remove: removeSkill} = useFieldArray({control, name: 'skills'});
+    const { fields: projects, append: appendProject, remove: removeProject } = useFieldArray({control, name: 'projects'});
 
     const handleDeleteEducationElement =  (id: number) =>{
         remove(id);
@@ -111,13 +151,13 @@ function CreateCvForm() {
     }
     
     return (
-        <form onSubmit={(event) => onSubmit(event)} className="flex flex-col gap-y-6">
-            <div className="gap-x-4 flex items-start h-[calc(100dvh-64px)] p-3">
-                    <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
+        <form onSubmit={(event) => onSubmit(event)} className="flex gap-y-6 justify-center">
+            <div className="gap-x-4 grid grid-cols-3 p-3 w-[65%]">
+                <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
                 {
                     actualPhase === 0
                         &&
-                    <section className="bg-base-100 p-5 rounded flex-1 h-full">
+                    <section className="bg-base-100 p-5 rounded flex-1 h-full col-start-2 col-end-4">
                         <HeaderWithContentComponent
                             title="Datos personales"
                             content="Ingresa tus datos personales"
@@ -250,7 +290,7 @@ function CreateCvForm() {
                 {
                     actualPhase === 1
                     &&
-                    <section className="bg-base-100 rounded p-2 flex-1 h-full">
+                    <section className="bg-base-100 rounded p-2 flex-1 h-full col-start-2 col-end-4">
                         <section className="flex flex-col items-center gap-x-5">
                             <HeaderWithContentComponent
                             title="Educación"
@@ -286,7 +326,7 @@ function CreateCvForm() {
                 {
                     actualPhase === 2
                     &&
-                    <section className="flex justify-center flex-1 h-full overflow-auto">
+                    <section className="flex justify-center flex-1 h-full overflow-auto col-start-2 col-end-4">
                         <div className="bg-base-100 p-4 rounded w-full">
                             <HeaderWithContentComponent
                                 title="Experiencia laboral"
@@ -317,11 +357,173 @@ function CreateCvForm() {
                 {
                     actualPhase === 3
                     &&
-                    <section>
-                        <HeaderWithContentComponent level={2} title="Ya casi hemos terminado" content="Selecciona el formato a generar y confirma para generar tu CV (:"/>
+                    <section className="flex flex-col col-start-2 col-end-4">
+                        <HeaderWithContentComponent level={3} title="Idiomas & Habilidades" content="Especifica habilidades e idiomas con tu nivel."/>
+                        <section className="grid grid-cols-2 gap-x-4 mt-4">
+                            <div>
+                                <HeaderWithContentComponent 
+                                    level={4} 
+                                    title="Habilidades" 
+                                    content="Redacta cada habilidad y el rango de dominio sobre ellas."
+                                >
+                                    <button type="button" className="btn btn-info" onClick={() => appendSkill({level: 1, name: ''})} >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+                                    </button>
+                                </HeaderWithContentComponent>
+                                {errors.skills && <ErrorTextComponent error={errors.skills.message ?? ''}/>}
+
+                                {
+                                    skills.map((skill, index) => (
+                                        <div key={skill.id} className="relative">
+                                            <InputComponent<CreateCvFormBody> 
+                                                register={register} 
+                                                errors={errors}
+                                                label="Habilidad"
+                                                name={`skills.${index}.name`}
+                                                type="text"
+                                                validations={{required: true}}
+                                            />
+                                            <LevelRateInputComponent<CreateCvFormBody>
+                                                errors={errors}
+                                                control={control}
+                                                name={`skills.${index}.level`}
+                                                rateElements={rateElements}
+                                                label="Nivel de habilidad"
+                                            />
+                                            <button type="button" onClick={() => removeSkill(index)} className="cursor-pointer absolute right-0 top-0 text-error">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 13.4l2.9 2.9q.275.275.7.275t.7-.275t.275-.7t-.275-.7L13.4 12l2.9-2.9q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275L12 10.6L9.1 7.7q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7l2.9 2.9l-2.9 2.9q-.275.275-.275.7t.275.7t.7.275t.7-.275zm0 8.6q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"/></svg>
+                                            </button>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                            <div>
+                                <HeaderWithContentComponent 
+                                    level={4} 
+                                    title="Idioma" 
+                                    content="Añade los idiomas que dominas y nivel de cada uno."
+                                >
+                                    <button type="button" className="btn btn-info"onClick={() => appendLanguage({level: 'Nativo', name: ''})}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+                                    </button>
+                                </HeaderWithContentComponent>
+                                {errors.languages && <ErrorTextComponent error={errors.languages.message ?? ''}/>}
+
+                                {
+                                    languages.map((language, index) => (
+                                        <div key={language.id} className="relative">
+                                            <InputComponent<CreateCvFormBody> 
+                                                errors={errors} 
+                                                label="Nombre del idioma"
+                                                name={`languages.${index}.name`}
+                                                register={register}
+                                                type="text"
+                                                validations={{required: true}}
+                                            />
+                                            <SelectComponent<CreateCvFormBody>
+                                                errors={errors}
+                                                label="Selecciona el nivel del idioma"
+                                                name={`languages.${index}.level`}
+                                                register={register}
+                                                selectOptions={[
+                                                    {label: 'Nativo', value: 'Nativo' },
+                                                    {label: 'A1', value: 'A1' },
+                                                    {label: 'A2', value: 'A1' },
+                                                    {label: 'B1', value: 'B1' },
+                                                    {label: 'B2', value: 'B2' },
+                                                    {label: 'C1', value: 'C1' },
+                                                    {label: 'C2', value: 'C2' },
+                                                ]}
+                                                isOptional={false}
+                                            />
+                                            <button type="button" onClick={() => removeLanguage(index)} className="cursor-pointer absolute right-0 top-0 text-error">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 13.4l2.9 2.9q.275.275.7.275t.7-.275t.275-.7t-.275-.7L13.4 12l2.9-2.9q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275L12 10.6L9.1 7.7q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7l2.9 2.9l-2.9 2.9q-.275.275-.275.7t.275.7t.7.275t.7-.275zm0 8.6q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"/></svg>
+                                            </button>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </section>
+                        <div className="mt-auto flex justify-between">
+                            <button type="button" className="btn btn-info" onClick={prevPhase}>Volver</button>
+                            <button type="button" className="btn btn-warning" onClick={() => validate("skillsLanguage")}>Continuar</button>
+                        </div>
+                    </section>
+                }
+
+                {
+                    actualPhase == 4
+                    &&
+                    <section className="flex flex-col col-start-2 col-end-4">
+                            <HeaderWithContentComponent 
+                            level={3} 
+                            title="Proyectos" 
+                            content="Coloca tus proyectos personales más relevantes para tu CV"
+                            >
+                                <button 
+                                    type="button" 
+                                    className="btn btn-info" 
+                                    onClick={() => appendProject({description: '', link: '', title: ''})}>
+                                        Añadir nuevo
+                                </button>
+                            </HeaderWithContentComponent>
+                        {errors.projects && <ErrorTextComponent error={errors.projects.message ?? ''}/>}
                         <section>
-                            <button type="submit">Generar CV</button>
+                            {
+                                projects.length > 0 ?
+                                    projects.map((project, index) => (
+                                        <div key={project.id} className="py-3">
+                                            <button type="button" onClick={() => removeProject(index)}>Eliminar</button>
+                                            <div className="grid grid-cols-2 gap-x-3">
+                                                <InputComponent<CreateCvFormBody>
+                                                    errors={errors}
+                                                    label="Nombre del proyecto"
+                                                    name={`projects.${index}.title`}
+                                                    register={register}
+                                                    type="text"
+                                                    validations={{required: true}}
+                                                />
+                                                <InputComponent<CreateCvFormBody>
+                                                    errors={errors}
+                                                    label="Link"
+                                                    name={`projects.${index}.link`}
+                                                    register={register}
+                                                    type="text"
+                                                    validations={{}}
+                                                />
+                                            </div>
+                                            <TextAreaComponent 
+                                                errors={errors}
+                                                label="Descripción del proyecto"
+                                                name={`projects.${index}.description`}
+                                                register={register}
+                                                required={true}
+                                                placeholder="El proyecto fué realizado con..."
+                                            />
+                                        </div>
+                                    ))
+                                :
+                                <div className="flex flex-col items-center justify-center h-[400px] px-4">
+                                    <p className="font-bold">Aún no has agregado nada.</p> 
+                                    <p className="text-info">Si lo deseas puedes continuar, no es obligatorio añadir proyectos pero es recomendable añadir al menos 1.</p>
+                                </div>
+                            }
+                        </section>
+                        <div className="mt-auto flex justify-between">
+                            <button type="button" className="btn btn-info" onClick={prevPhase}>Volver</button>
+                            <button type="button" className="btn btn-warning" onClick={() => validate("projects")}>Continuar</button>
+                        </div>
+                    </section>
+                }
+
+                {
+                    actualPhase === 5
+                    &&
+                    <section className="flex flex-col col-start-2 col-end-4">
+                        <HeaderWithContentComponent level={3} title="¡Ya hemos terminado!" content="Verifica que la información sea correcta, pero no te preocupes si decides guardarla, podrás editarla cuando quieras."/>
+                        <section className="mt-auto flex justify-between">
                             <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
+                            <button type="submit" className="btn btn-success">Generar CV</button>
                         </section>
                     </section>
                 }
