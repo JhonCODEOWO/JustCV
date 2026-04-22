@@ -12,7 +12,7 @@ interface InputComponentProps<T extends FieldValues> {
 function InputComponent<T extends FieldValues>({label,type, name, register, errors, validations = {}}: InputComponentProps<T>) {
     const required: boolean = Object.keys(validations).includes('required');
     const error = get(errors, name);
-    const globalInputClasses = 'input outline-0';
+    const globalInputClasses = 'input outline-0 w-full';
     const errorClasses = (error)? 'border border-error': '';
     return (
         <fieldset className="fieldset">
