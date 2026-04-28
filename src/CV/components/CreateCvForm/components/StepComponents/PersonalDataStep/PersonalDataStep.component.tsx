@@ -12,7 +12,7 @@ function PersonalDataStep({register, errors, validate}: StepComponentProps<Creat
         level={3}
       />
       <section>
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3 gap-x-3">
           <InputComponent<CreateCvFormBody>
             errors={errors}
             label="Nombre completo"
