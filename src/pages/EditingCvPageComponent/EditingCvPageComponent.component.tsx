@@ -19,7 +19,7 @@ function EditingPageComponent() {
     
     return ( 
         <main>
-            <CreateCvForm cv={cvFromLocalStorage.cv}/>
+            <CreateCvForm cv={cvFromLocalStorage.cv} id={uuid}/>
         </main>
      );
 }
