@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import type { CreateCvFormBody } from "../../../components/CreateCvForm/schemas/CreateCVSchema";
 import { CvsContext } from "../CvsContext";
 import { Outlet } from "react-router-dom";
+import type { CvElementContext } from "../interfaces/CvElementContext.interface";
+import {v4 as uuid} from 'uuid'
 
 function CvsProviderComponent() {
     const savesLimit = 10;
-    const [cvs, setCvs] = useState<CreateCvFormBody[]>(JSON.parse(localStorage.getItem('cvs') ?? "[]"));
+    const [cvs, setCvs] = useState<CvElementContext[]>(JSON.parse(localStorage.getItem('cvs') ?? "[]"));
     const itemsLeft = savesLimit - cvs.length;
 
     useEffect(() => {
@@ -20,7 +22,8 @@ function CvsProviderComponent() {
     }
 
     const addCv = (cvForm: CreateCvFormBody) => {
-        setCvs(prev => [...prev, cvForm]);
+        const uniqueID = uuid();
+        setCvs(prev => [...prev, {cv: cvForm, id: uniqueID}]);
     }
     return (
         <CvsContext.Provider value={{addCv, deleteCv, cvs, itemsLeft}}>
