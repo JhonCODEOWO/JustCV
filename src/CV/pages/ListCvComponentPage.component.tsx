@@ -49,10 +49,10 @@ function ListCvComponentPage() {
             </div>
 
             {
-                cvs.map((cv, index) => 
+                cvs.map((cvElement, index) => 
                     <CvElementComponent 
-                        cv={cv} 
-                        key={index} 
+                        cv={cvElement.cv} 
+                        key={cvElement.id} 
                         index={index} 
                         onDeleteBtn={handleDeleteButton}
                         onDownloadBtn={handleDownloadButton}
