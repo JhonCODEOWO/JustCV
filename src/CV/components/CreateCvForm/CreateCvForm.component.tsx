@@ -1,18 +1,12 @@
 import { useFieldArray, useForm, type FieldPath } from "react-hook-form";
-import InputComponent from "../../../shared/components/InputComponent/input.component";
-import WorkExperienceElementComponent from "./components/WorkExperienceElement/WorkExperienceElement.component";
 import HeaderWithContentComponent from "../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
 import { CreateCVSchema, type CreateCvFormBody } from "./schemas/CreateCVSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
-import SelectComponent from "../../../shared/components/SelectComponent/SelectComponent";
 import { useNavigate } from "react-router-dom";
 import { useCvsContext } from "../../contexts/CvsContext/hooks/CvsContextHook";
-import LevelRateInputComponent from "../../../shared/components/LevelRateComponent/LevelRateInputComponent.component";
-import ErrorTextComponent from "../../../shared/components/ErrorTextComponent/ErrorTextComponent.component";
-import TextAreaComponent from "../../../shared/components/TextAreaComponent/TextAreaComponent.component";
 import PersonalDataStep from "./components/StepComponents/PersonalDataStep/PersonalDataStep.component";
 import EducationDataStep from "./components/StepComponents/EducationDataStep/EducationDataStep.component";
 import LaboralDataStep from "./components/StepComponents/LaboralDataStep/LaboralDataStep.component";
