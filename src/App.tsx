@@ -7,6 +7,7 @@ import CreatingCVPageComponent from './pages/CreatingCVPageComponent/CreatingCVP
 import ListCvComponentPage from './CV/pages/ListCvComponentPage.component'
 import CvsProviderComponent from './CV/contexts/CvsContext/wrappers/CvsProviderComponent.component'
 import AppProvidersComponent from './wrappers/AppProviders.component'
+import EditingPageComponent from './pages/EditingCvPageComponent/EditingCvPageComponent.component'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
               {/* Provider of cvs */}
               <Route element={<CvsProviderComponent/>}>
                 <Route path='/creating-cv' element={<CreatingCVPageComponent/>}/>
+                <Route path='/editing/:uuid' element={<EditingPageComponent/>}/>
                 <Route path='/home' element={<ListCvComponentPage/>}/>
               </Route>
           </Route>
