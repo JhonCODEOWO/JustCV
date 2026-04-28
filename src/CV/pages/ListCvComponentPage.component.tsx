@@ -35,8 +35,8 @@ function ListCvComponentPage() {
         }
     }
 
-    const handleUpdateFormatButton = () => {
-        
+    const handleUpdateFormatButton = (uuid: string) => {
+        navigation(`/editing/${uuid}`);
     }
 
     return (
@@ -51,7 +51,7 @@ function ListCvComponentPage() {
             {
                 cvs.map((cvElement, index) => 
                     <CvElementComponent 
-                        cv={cvElement.cv} 
+                        element={cvElement} 
                         key={cvElement.id} 
                         index={index} 
                         onDeleteBtn={handleDeleteButton}
