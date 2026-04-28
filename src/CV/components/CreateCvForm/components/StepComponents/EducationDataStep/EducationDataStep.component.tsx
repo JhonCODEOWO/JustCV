@@ -71,16 +71,6 @@ function EducationDataStep({
           );
         })}
       </section>
-      <button className="btn btn-info" type="button" onClick={prevPhase}>
-        Volver
-      </button>
-      <button
-        className="btn btn-warning"
-        type="button"
-        onClick={() => validate("educationData")}
-      >
-        Continuar
-      </button>
     </>
   );
 }

@@ -142,13 +142,6 @@ function PersonalDataStep({register, errors, validate}: StepComponentProps<Creat
           </p>
         </fieldset>
       </section>
-      <button
-        className="btn btn-warning"
-        type="button"
-        onClick={() => validate("personalData")}
-      >
-        Continuar
-      </button>
     </>
   );
 }

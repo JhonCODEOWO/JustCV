@@ -200,18 +200,6 @@ function SkillsLanguageStep({
           ))}
         </div>
       </section>
-      <div className="mt-auto flex justify-between">
-        <button type="button" className="btn btn-info" onClick={prevPhase}>
-          Volver
-        </button>
-        <button
-          type="button"
-          className="btn btn-warning"
-          onClick={() => validate("skillsLanguage")}
-        >
-          Continuar
-        </button>
-      </div>
     </>
   );
 }

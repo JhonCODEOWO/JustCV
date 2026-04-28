@@ -12,6 +12,7 @@ import EducationDataStep from "./components/StepComponents/EducationDataStep/Edu
 import LaboralDataStep from "./components/StepComponents/LaboralDataStep/LaboralDataStep.component";
 import SkillsLanguageStep from "./components/StepComponents/SkillsLanguageStep/SkillsLanguageStep.component";
 import ProjectsStep from "./components/StepComponents/ProjectsStep/ProjectsStep.component";
+import type { JSX } from "react";
 
 //TODO: The useSteps hook should retrieve this values
 export type StepID = "personalData" | "educationData" | "laboralData" | "skillsLanguage" | "finalPhase" | "projects";
@@ -19,7 +20,7 @@ export type StepID = "personalData" | "educationData" | "laboralData" | "skillsL
 function CreateCvForm() {
     const navigate = useNavigate();
     const {addCv} = useCvsContext();
-    const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore} = useSteps([
+    const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore, actualStepElement} = useSteps([
         {
             id: 'personalData',
             title: 'Datos personales'
@@ -62,10 +63,10 @@ function CreateCvForm() {
     });
 
     /**
-     * Field values separated by a ID
+     * Field values separated by a ID to indicate what fields should validate in each step
      */
     const fieldsByStep: Record<StepID, FieldPath<CreateCvFormBody>[]> = {
-            'personalData': ["fullname", "email", "phoneNumber", "profesionalLinks", "residence", "resume"],
+            personalData: ["fullname", "email", "phoneNumber", "profesionalLinks", "residence", "resume"],
             educationData: ["education"],
             laboralData: ["workExperience"],
             skillsLanguage: ["skills", "languages"],
@@ -122,21 +123,10 @@ function CreateCvForm() {
         if(result.includes(false)) return;
         goTo(requestedIndex);
     }
-    
-    return (
-        <form onSubmit={(event) => onSubmit(event)} className="flex gap-y-6 justify-center">
-            <div className="gap-x-4 grid grid-cols-3 p-3 w-[65%]">
-                <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
-                <section className="bg-base-100 p-5 rounded flex-1 h-full col-start-2 col-end-4">
-                    {
-                        actualPhase === 0
-                        &&
-                        <PersonalDataStep errors={errors} register={register} validate={validate}/>
-                    }
-                    {
-                        actualPhase === 1
-                        &&
-                        <EducationDataStep 
+
+    const stepsRenders: Record<StepID, JSX.Element> = {
+        'personalData': <PersonalDataStep errors={errors} register={register} validate={validate}/>,
+        'educationData': <EducationDataStep 
                             append={append} 
                             control={control} 
                             errors={errors} 
@@ -146,12 +136,8 @@ function CreateCvForm() {
                             validate={validate}
                             prevPhase={prevPhase}
                             onDeleteEducationElement={handleDeleteEducationElement}
-                        />
-                    }
-                    {
-                        actualPhase === 2
-                        &&
-                        <LaboralDataStep 
+                        />,
+        'laboralData': <LaboralDataStep 
                             appendWorkExperience={appendWorkExperience}
                             control={control}
                             errors={errors}
@@ -161,12 +147,8 @@ function CreateCvForm() {
                             validate={validate}
                             workExperienceFields={workExperienceFields}
                             prevPhase={prevPhase}
-                        />
-                    }
-                    {
-                        actualPhase === 3
-                        &&
-                        <SkillsLanguageStep 
+                        />,
+        'skillsLanguage': <SkillsLanguageStep 
                             appendLanguage={appendLanguage} 
                             appendSkill={appendSkill} 
                             control={control} 
@@ -178,12 +160,8 @@ function CreateCvForm() {
                             skills={skills} 
                             validate={validate} 
                             prevPhase={prevPhase}
-                        />
-                    }
-                    {
-                        actualPhase === 4
-                        &&
-                        <ProjectsStep
+                        />,
+        'projects': <ProjectsStep
                             appendProject={appendProject}
                             errors={errors}
                             projects={projects}
@@ -191,20 +169,39 @@ function CreateCvForm() {
                             removeProject={removeProject}
                             validate={validate}
                             prevPhase={prevPhase}
-                        />
-                    }
-                </section>
-                {
-                    actualPhase === 5
-                    &&
-                    <section className="flex flex-col col-start-2 col-end-4">
+                        />,
+        'finalPhase': <>
                         <HeaderWithContentComponent level={3} title="¡Ya hemos terminado!" content="Verifica que la información sea correcta, pero no te preocupes si decides guardarla, podrás editarla cuando quieras."/>
                         <section className="mt-auto flex justify-between">
                             <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
                             <button type="submit" className="btn btn-success">Generar CV</button>
                         </section>
+                    </>
+    }
+    
+    return (
+        <form onSubmit={(event) => onSubmit(event)} className="flex gap-y-6 justify-center">
+            <div className="gap-x-4 grid grid-cols-3 w-[65%] h-[500px] relative">
+                <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
+                <div className="col-start-2 col-end-4 bg-base-100 rounded">
+                    <section className="h-[400px] overflow-auto">
+                    {
+                        stepsRenders[actualStepElement.id as StepID]
+                    }
                     </section>
-                }
+                    <div className="flex justify-between">
+                        <button className="btn btn-info" type="button" onClick={prevPhase} disabled={actualPhase === 0}>
+                        Volver
+                        </button>
+                        <button
+                            className="btn btn-warning"
+                            type="button"
+                            onClick={() => validate(actualStepElement.id as StepID)}
+                        >
+                            Continuar
+                        </button>
+                    </div>
+                </div>
             </div>
         </form>
     );

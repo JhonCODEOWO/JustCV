@@ -78,18 +78,6 @@ function ProjectsStep({errors, register, validate, prevPhase, appendProject, pro
           </div>
         )}
       </section>
-      <div className="mt-auto flex justify-between">
-        <button type="button" className="btn btn-info" onClick={prevPhase}>
-          Volver
-        </button>
-        <button
-          type="button"
-          className="btn btn-warning"
-          onClick={() => validate("projects")}
-        >
-          Continuar
-        </button>
-      </div>
     </>
   );
 }
