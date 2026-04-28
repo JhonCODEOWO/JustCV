@@ -1,4 +1,3 @@
-import { validate } from "uuid";
 import HeaderWithContentComponent from "../../../../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
 import InputComponent from "../../../../../../shared/components/InputComponent/input.component";
 import type { CreateCvFormBody } from "../../../schemas/CreateCVSchema";
