@@ -12,13 +12,18 @@ import EducationDataStep from "./components/StepComponents/EducationDataStep/Edu
 import LaboralDataStep from "./components/StepComponents/LaboralDataStep/LaboralDataStep.component";
 import SkillsLanguageStep from "./components/StepComponents/SkillsLanguageStep/SkillsLanguageStep.component";
 import ProjectsStep from "./components/StepComponents/ProjectsStep/ProjectsStep.component";
-import type { JSX } from "react";
+import { useEffect, type JSX } from "react";
 import CertificationsDataStep from "./components/StepComponents/CertificationsDataStep/CertificationsDataStep.component";
 
 //TODO: The useSteps hook should retrieve this values
 export type StepID = "personalData" | "educationData" | "laboralData" | "skillsLanguage" | "finalPhase" | "projects" | "certifications";
 
-function CreateCvForm() {
+interface CreateCvFormProps{
+    cv?: CreateCvFormBody | null,
+    id?: string | null,
+}
+
+function CreateCvForm({cv, id}: CreateCvFormProps) {
     const navigate = useNavigate();
     const {addCv} = useCvsContext();
     const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore, actualStepElement} = useSteps([
@@ -52,20 +57,24 @@ function CreateCvForm() {
         }
     ]);
     
-    const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues} = useForm<CreateCvFormBody>({
+    const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues, reset} = useForm<CreateCvFormBody>({
         mode: 'onChange',
         defaultValues: {
-            fullname: 'Jonathan Juárez',
-            email: 'jjv20618@gmail.com',
-            phoneNumber: `7299353872`,
-            resume: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam blandit pulvinar odio, vel lacinia odio. Morbi maximus nisi in molestie ornare. Etiam in arcu enim. Curabitur non augue neque. Ut. `,
-            education: [{graduationDate: '01-09-2002', institutionName: 'ITSSNP', titleName: 'Ing. Informática', type: 'titulo'}],
-            profesionalLinks: {github: '', linkedIn: 'https://www.linkedin.com/in/jonathan-juarez-valera/', portfolioWeb: ''},
-            residence: {city: 'Zacatlán', country: 'Puebla'},
-            workExperience: [{achievements: [{description: 'nose'}], companyName: 'Empresa', occupation: 'Pajeador', startDate: '01-01-2002'}],
+            fullname: '',
+            email: '',
+            phoneNumber: ``,
+            resume: ``,
+            education: [],
+            profesionalLinks: {github: '', linkedIn: '', portfolioWeb: ''},
+            residence: {city: '', country: ''},
+            workExperience: [],
         },
         resolver: zodResolver(CreateCVSchema)
     });
+
+    useEffect(() => {
+        if(cv) reset(cv);
+    }, [cv, reset])
 
     /**
      * Field values separated by a ID to indicate what fields should validate in each step
@@ -107,6 +116,7 @@ function CreateCvForm() {
         if(!result) return;
         const value = getValues();
 
+        /**TODO: DIFERENCIAR ENTRE MODO EDICIÓN O CREACIÓN */
         addCv(value);
         navigate('/home');
     }
