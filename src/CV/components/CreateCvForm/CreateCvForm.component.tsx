@@ -13,9 +13,10 @@ import LaboralDataStep from "./components/StepComponents/LaboralDataStep/Laboral
 import SkillsLanguageStep from "./components/StepComponents/SkillsLanguageStep/SkillsLanguageStep.component";
 import ProjectsStep from "./components/StepComponents/ProjectsStep/ProjectsStep.component";
 import type { JSX } from "react";
+import CertificationsDataStep from "./components/StepComponents/CertificationsDataStep/CertificationsDataStep.component";
 
 //TODO: The useSteps hook should retrieve this values
-export type StepID = "personalData" | "educationData" | "laboralData" | "skillsLanguage" | "finalPhase" | "projects";
+export type StepID = "personalData" | "educationData" | "laboralData" | "skillsLanguage" | "finalPhase" | "projects" | "certifications";
 
 function CreateCvForm() {
     const navigate = useNavigate();
@@ -40,6 +41,10 @@ function CreateCvForm() {
         {
             id: 'projects',
             title: 'Proyectos personales'
+        },
+        {
+            id: 'certifications',
+            title: 'Certificaciones.'
         },
         {
             id: 'finalPhase',
@@ -71,6 +76,7 @@ function CreateCvForm() {
             laboralData: ["workExperience"],
             skillsLanguage: ["skills", "languages"],
             projects: ["projects"],
+            certifications: ["certifications"],
             finalPhase: []
     }
 
@@ -79,6 +85,7 @@ function CreateCvForm() {
     const {fields: languages, append: appendLanguage, remove: removeLanguage} = useFieldArray({control, name: 'languages'});
     const {fields: skills, append: appendSkill, remove: removeSkill} = useFieldArray({control, name: 'skills'});
     const { fields: projects, append: appendProject, remove: removeProject } = useFieldArray({control, name: 'projects'});
+    const {append: appendCertification, remove: removeCertification, fields: certifications} = useFieldArray({control, name: 'certifications'});
 
     const handleDeleteEducationElement =  (id: number) =>{
         remove(id);
@@ -176,7 +183,16 @@ function CreateCvForm() {
                             <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
                             <button type="submit" className="btn btn-success">Generar CV</button>
                         </section>
-                    </>
+                    </>,
+        'certifications': <CertificationsDataStep 
+                            appendCertification={appendCertification} 
+                            certifications={certifications}
+                            errors={errors}
+                            register={register}
+                            removeCertification={removeCertification}
+                            validate={validate}
+                            prevPhase={prevPhase}
+                            />
     }
     
     return (
@@ -184,7 +200,7 @@ function CreateCvForm() {
             <div className="gap-x-4 grid grid-cols-3 w-[65%] h-[500px] relative">
                 <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
                 <div className="col-start-2 col-end-4 bg-base-100 rounded">
-                    <section className="h-[400px] overflow-auto">
+                    <section className="h-[450px] overflow-auto">
                     {
                         stepsRenders[actualStepElement.id as StepID]
                     }
