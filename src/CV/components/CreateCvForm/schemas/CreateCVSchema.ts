@@ -12,7 +12,7 @@ const Education = z.object({
 const Project = z.object({
     title: z.string().min(3),
     description: z.string().min(10),
-    link: z.httpUrl(),
+    link: z.httpUrl().or(z.literal('')).optional(),
 })
 
 const Skill = z.object({
@@ -67,7 +67,7 @@ export const CreateCVSchema = z.object({
     projects: z.array(Project).optional(),
     skills: z.array(Skill).min(1, {error: 'Es necesario que coloques al menos una habilidad.'}),
     languages: z.array(Language).min(1, {error: 'Coloca mínimo tu idioma nativo.'}),
-    certifications: z.array(Certification),
+    certifications: z.array(Certification).optional(),
 })
 
 /**
