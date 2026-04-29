@@ -25,8 +25,17 @@ function CvsProviderComponent() {
         const uniqueID = uuid();
         setCvs(prev => [...prev, {cv: cvForm, id: uniqueID}]);
     }
+
+    const updateCv = (uuid: string, newCv: CreateCvFormBody) => {
+        setCvs(prev => {
+            return prev.map(cvElement => {
+                if(cvElement.id === uuid) return ({...cvElement, cv: newCv})
+                return {...cvElement};
+            })
+        });
+    }
     return (
-        <CvsContext.Provider value={{addCv, deleteCv, cvs, itemsLeft}}>
+        <CvsContext.Provider value={{addCv, deleteCv, cvs, itemsLeft, updateCv}}>
             <Outlet/>
         </CvsContext.Provider>
     );
