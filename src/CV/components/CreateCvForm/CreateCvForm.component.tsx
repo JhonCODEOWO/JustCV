@@ -2,7 +2,7 @@ import { useFieldArray, useForm, type FieldPath } from "react-hook-form";
 import HeaderWithContentComponent from "../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
 import { CreateCVSchema, type CreateCvFormBody } from "./schemas/CreateCVSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSteps } from "../../../shared/hooks/FormSteps/FormSteps";
+import { useSteps } from "../../../shared/hooks/FormSteps/useSteps";
 import StepsTimelineComponent from "../../../shared/hooks/FormSteps/Components/StepsTimelineComponent/StepsTimelineComponent.component";
 import type { Step } from "../../../shared/hooks/FormSteps/interfaces/StepInterface.interface";
 import { useNavigate } from "react-router-dom";
@@ -25,8 +25,8 @@ interface CreateCvFormProps{
 
 function CreateCvForm({cv, id}: CreateCvFormProps) {
     const navigate = useNavigate();
-    const {addCv} = useCvsContext();
-    const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore, actualStepElement} = useSteps([
+    const {addCv, updateCv} = useCvsContext();
+    const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore, actualStepElement, canGoNext} = useSteps([
         {
             id: 'personalData',
             title: 'Datos personales'
@@ -72,6 +72,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
         resolver: zodResolver(CreateCVSchema)
     });
 
+    /** Effect that handle if a cv is passed by props if is present then apply that values to the current form */
     useEffect(() => {
         if(cv) reset(cv);
     }, [cv, reset])
@@ -110,15 +111,27 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
         nextPhase();
     }
 
-    async function onSubmit(event: React.SubmitEvent){
-        event.preventDefault();
+    async function processFormData(){
         const result = await trigger();
         if(!result) return;
         const value = getValues();
-
-        /**TODO: DIFERENCIAR ENTRE MODO EDICIÓN O CREACIÓN */
-        addCv(value);
+        
+        if(id){
+            updateCv(id, value);
+        } else {
+            addCv(value);
+        }
         navigate('/home');
+    }
+
+    const onSubmit = (e: React.SubmitEvent) => {
+        e.preventDefault();
+        
+        if(canGoNext){
+            validate(actualStepElement.id as StepID);
+        } else {
+            processFormData();
+        }
     }
 
     /**
@@ -189,10 +202,6 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
                         />,
         'finalPhase': <>
                         <HeaderWithContentComponent level={3} title="¡Ya hemos terminado!" content="Verifica que la información sea correcta, pero no te preocupes si decides guardarla, podrás editarla cuando quieras."/>
-                        <section className="mt-auto flex justify-between">
-                            <button className="btn btn-info" type="button" onClick={prevPhase}>Volver</button>
-                            <button type="submit" className="btn btn-success">Generar CV</button>
-                        </section>
                     </>,
         'certifications': <CertificationsDataStep 
                             appendCertification={appendCertification} 
@@ -206,25 +215,30 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
     }
     
     return (
-        <form onSubmit={(event) => onSubmit(event)} className="flex gap-y-6 justify-center">
+        <form className="flex gap-y-6 justify-center" onSubmit={onSubmit}>
             <div className="gap-x-4 grid grid-cols-3 w-[65%] h-[500px] relative">
+                {/* Steps timeline state */}
                 <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
+                {/* Main content rendered */}
                 <div className="col-start-2 col-end-4 bg-base-100 rounded">
+                    {/* Content rendered by step id */}
                     <section className="h-[450px] overflow-auto">
                     {
                         stepsRenders[actualStepElement.id as StepID]
                     }
                     </section>
+                    {/* Navigate buttons */}
                     <div className="flex justify-between">
                         <button className="btn btn-info" type="button" onClick={prevPhase} disabled={actualPhase === 0}>
                         Volver
                         </button>
+                        
+                        {/* Change the function executed based on the actual step and if there is a step left or not */}
                         <button
-                            className="btn btn-warning"
-                            type="button"
-                            onClick={() => validate(actualStepElement.id as StepID)}
+                            className={`btn ${canGoNext? 'btn-accent': 'btn-success'}`}
+                            type="submit"
                         >
-                            Continuar
+                            {canGoNext? 'Continuar': 'Finalizar'}
                         </button>
                     </div>
                 </div>
