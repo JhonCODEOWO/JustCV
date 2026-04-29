@@ -15,6 +15,7 @@ interface CvElementComponentProps {
     element: CvElementContext;
     index: number;
     onDeleteBtn: (index: number) => void;
+    /** A function to pass the necessary data to process the request and download the pdf */
     onDownloadBtn: (args: CvElementDownloadArgsInterface, options: DownloadOptionsElementInterface) => Promise<boolean>;
     onUpdateCv: (uuid: string) => void;
 }
