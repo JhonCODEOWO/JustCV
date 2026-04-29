@@ -76,13 +76,23 @@ export const CreateCVSchema = z.object({
  */
 export const CreateCVSanitized = CreateCVSchema.transform((fields) => ({
     ...fields,
+    ...(fields.projects?.length === 0
+            ? 
+                {projects: undefined}
+            : 
+                {projects: fields.projects?.map(p => ({...p, link: !p.link ? undefined : p.link}))}),
+    ...(fields.certifications?.length === 0
+            ? 
+                {certifications: undefined}
+            : 
+                {certifications: fields.certifications?.map((c) => ({...c, year: !c.year ? undefined: c.year}))}),
     profesionalLinks: Object.fromEntries(Object.entries(fields.profesionalLinks).filter(([,v]) => v!= '')),
     workExperience: fields.workExperience.map((workExp) => {
         return {
             ...workExp,
             achievements: workExp.achievements.map(a => a.description),
         }
-    })
+    }),
 }))
 
 export type CreateCvFormBody = z.infer<typeof CreateCVSchema>;
