@@ -7,6 +7,7 @@ interface CvsContextType {
     itemsLeft: number;
     addCv: (cv: CreateCvFormBody) => void;
     deleteCv: (index: number) => void;
+    updateCv: (uuid: string, newCv: CreateCvFormBody) => void;
 }
 
 export const CvsContext = createContext<CvsContextType | null>(null);
