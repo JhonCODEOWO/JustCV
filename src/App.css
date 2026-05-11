@@ -1,0 +1,84 @@
+@keyframes ExpandFromTopRight {
+    0% {
+        opacity: 0;
+        transform: scale(.2);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes FromFadeElement {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes FromFadeElementOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes DropDownAnimation {
+    0% {
+        opacity: 0;
+        transform: 
+            scale(.95)
+            translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: 
+            scale(1)
+            translateY(0);
+    }
+}
+
+@keyframes DropDownAnimationOut {
+    0% {
+        opacity: 1;
+        transform:
+            scale(1)
+            translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            scale(.95)
+            translateY(-30px);
+    }
+}
+
+.expandFromTopRight {
+    transform-origin: top right;
+    animation: .3s ease-out ExpandFromTopRight ;
+}
+
+.fromFadeElement {
+    animation: .2s ease-out FromFadeElement;
+}
+
+.fromFadeElementOut {
+    animation: .2s ease-out FromFadeElementOut;
+}
+
+.dropDownAnimation {
+    animation: .2s ease-out DropDownAnimation;
+}
+
+.dropDownAnimationOut {
+    animation: .2s ease-out DropDownAnimationOut forwards;
+}
