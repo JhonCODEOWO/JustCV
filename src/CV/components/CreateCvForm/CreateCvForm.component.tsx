@@ -14,6 +14,7 @@ import SkillsLanguageStep from "./components/StepComponents/SkillsLanguageStep/S
 import ProjectsStep from "./components/StepComponents/ProjectsStep/ProjectsStep.component";
 import { useEffect, type JSX } from "react";
 import CertificationsDataStep from "./components/StepComponents/CertificationsDataStep/CertificationsDataStep.component";
+import { useViewPortContext } from "../../../shared/utils/contexts/ViewPortContext/ViewPortContextHook";
 
 //TODO: The useSteps hook should retrieve this values
 export type StepID = "personalData" | "educationData" | "laboralData" | "skillsLanguage" | "finalPhase" | "projects" | "certifications";
@@ -26,6 +27,7 @@ interface CreateCvFormProps{
 function CreateCvForm({cv, id}: CreateCvFormProps) {
     const navigate = useNavigate();
     const {addCv, updateCv} = useCvsContext();
+    const {deviceType} = useViewPortContext();
     const {actualPhase, nextPhase, prevPhase, totalPhases, goTo, elementsBefore, actualStepElement, canGoNext} = useSteps([
         {
             id: 'personalData',
@@ -216,13 +218,24 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
     
     return (
         <form className="flex gap-y-6 justify-center" onSubmit={onSubmit}>
-            <div className="gap-x-4 grid grid-cols-3 w-[65%] h-[500px] relative">
+            <div 
+                className={`
+                        gap-x-4 gap-y-2 md:grid md:grid-cols-3 md:w-[65%] md:h-125 relative
+                        ${deviceType === 'smartphone'? 'w-full flex flex-col': ''}
+                    `}
+            >
                 {/* Steps timeline state */}
-                <StepsTimelineComponent actualPhase={actualPhase} steps={totalPhases} onStepWanted={handleWantedStep} className="h-full"/>
+                <StepsTimelineComponent 
+                    actualPhase={actualPhase} 
+                    steps={totalPhases} 
+                    onStepWanted={handleWantedStep} 
+                    className={`${deviceType === 'smartphone'? 'sticky top-0 z-50': 'h-full'}`}
+                    style={`${deviceType === 'smartphone'? 'steps-horizontal':'steps-vertical'}`}
+                />
                 {/* Main content rendered */}
-                <div className="col-start-2 col-end-4 bg-base-100 rounded">
+                <div className="md:col-start-2 md:col-end-4 bg-base-100 rounded">
                     {/* Content rendered by step id */}
-                    <section className="h-[450px] overflow-auto">
+                    <section className="p-5 md:p-0 md:h-[450px] overflow-auto">
                     {
                         stepsRenders[actualStepElement.id as StepID]
                     }
