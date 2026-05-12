@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { ViewPortContext } from "../ViewPortContext.context";
 import type { DeviceType } from "../types/DeviceType";
 
@@ -18,7 +18,7 @@ function ViewPortProviderComponent({children}: ViewPortProviderComponentProps) {
     const [deviceType, setDeviceType] = useState<DeviceType>(getDeviceType(window.innerWidth));
 
     useEffect(() => {
-        window.addEventListener('resize', (e) => {
+        window.addEventListener('resize', () => {
             setDeviceType(getDeviceType(window.innerWidth))
         })
     }, [])
