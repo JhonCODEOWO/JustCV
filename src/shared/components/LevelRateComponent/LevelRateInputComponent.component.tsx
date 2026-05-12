@@ -1,6 +1,7 @@
 import { Controller, type Control, type FieldErrors, type FieldValues, type Path } from "react-hook-form";
 import type { LevelRateInputValue } from "./components/LevelRateComponent/interfaces/LevelRateValue.interface";
 import LevelRateComponent from "./components/LevelRateComponent/LevelRateComponent.component";
+import { useViewPortContext } from "../../utils/contexts/ViewPortContext/ViewPortContextHook";
 
 interface LevelRateInputComponentProps<T extends FieldValues> {
     control: Control<T>,
@@ -11,6 +12,23 @@ interface LevelRateInputComponentProps<T extends FieldValues> {
 }
 
 function LevelRateInputComponent<T extends FieldValues>({control, name, rateElements, errors, label}: LevelRateInputComponentProps<T>) {
+  const {deviceType} = useViewPortContext()
+
+  if(deviceType === 'smartphone' || deviceType === 'tablet') return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <LevelRateComponent<T>
+            rateElements={rateElements}
+            field={field}
+            orientation="horizontal"
+            errors={errors}
+        />
+      )}
+    />
+  )
+
   return (
     <Controller
       control={control}
