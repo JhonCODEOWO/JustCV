@@ -8,11 +8,13 @@ import { useNotificationsContext } from "../../notifications/hooks/useNotificati
 import type { CvElementDownloadArgsInterface } from "../components/CvElementComponent/interfaces/CvElementDownloadArgsInterface.interface";
 import type { DownloadOptionsElementInterface } from "../components/CvElementComponent/interfaces/DownloadOptionsElementInterface.interface";
 import HeaderWithContentComponent from "../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
+import { useViewPortContext } from "../../shared/utils/contexts/ViewPortContext/ViewPortContextHook";
 
 function ListCvComponentPage() {
     const navigation = useNavigate();
     const {cvs, deleteCv, itemsLeft} = useCvsContext();
     const {create} = useNotificationsContext();
+    const {deviceType} = useViewPortContext();
     
     const onAddButton = () => {
         navigation('/creating-cv');
@@ -47,8 +49,19 @@ function ListCvComponentPage() {
                 </button>
             </HeaderWithContentComponent>
             <div>Espacios disponibles para almacenar CVs: {itemsLeft}</div>
-            <div className="h-87.5 overflow-y-auto rounded p-2">
+            {deviceType === 'smartphone' 
+                &&
+                <div role="alert" className="alert alert-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span>Parece que estás utilizando un smartphone, la experiencia para la creación/edición de tus curriculums es mejor en PC</span>
+                </div>
+            }
+            <div className="h-87.5 overflow-y-auto rounded relative">
                 {
+                    cvs.length > 0
+                    ?
                     cvs.map((cvElement, index) =>
                         <div key={cvElement.id} >
                             <CvElementComponent 
@@ -61,6 +74,10 @@ function ListCvComponentPage() {
                             <div className="divider"></div>
                         </div>
                     )
+                    :
+                    <section className="absolute h-full flex items-center justify-center p-2.5">
+                        <p>¡Oops! Parece que aún no has creado nada, tus nuevos CVs aparecerán aquí.</p>
+                    </section>
                 }
             </div>
         </main>

@@ -220,7 +220,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
         <form className="flex gap-y-6 justify-center" onSubmit={onSubmit}>
             <div 
                 className={`
-                        gap-x-4 gap-y-2 md:grid md:grid-cols-3 md:w-[65%] md:h-125 relative
+                        gap-x-4 gap-y-2 lg:grid lg:grid-cols-3 md:w-[65%] md:h-125 relative
                         ${deviceType === 'smartphone'? 'w-full flex flex-col': ''}
                     `}
             >
@@ -229,13 +229,13 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
                     actualPhase={actualPhase} 
                     steps={totalPhases} 
                     onStepWanted={handleWantedStep} 
-                    className={`${deviceType === 'smartphone'? 'sticky top-0 z-50': 'h-full'}`}
-                    style={`${deviceType === 'smartphone'? 'steps-horizontal':'steps-vertical'}`}
+                    className={`${deviceType === 'smartphone' || deviceType === 'tablet'? 'sticky top-0 z-50': 'h-full'}`}
+                    style={`${deviceType === 'smartphone' || deviceType === 'tablet'? 'steps-horizontal':'steps-vertical'}`}
                 />
                 {/* Main content rendered */}
-                <div className="md:col-start-2 md:col-end-4 bg-base-100 rounded">
+                <div className="lg:col-start-2 lg:col-end-4 bg-base-100 rounded">
                     {/* Content rendered by step id */}
-                    <section className="p-5 md:p-0 md:h-[450px] overflow-auto">
+                    <section className="p-5 md:p-0 lg:h-[450px] overflow-auto">
                     {
                         stepsRenders[actualStepElement.id as StepID]
                     }
