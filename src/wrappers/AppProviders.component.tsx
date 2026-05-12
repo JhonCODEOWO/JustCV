@@ -1,4 +1,5 @@
 import NotificationProviderComponent from "../notifications/NotificationsProvider.component";
+import ViewPortProviderComponent from "../shared/utils/contexts/ViewPortContext/wrapper/ViewPortProviderComponent.component";
 
 interface AppProvidersComponentProps {
     children: React.ReactNode;
@@ -7,9 +8,11 @@ interface AppProvidersComponentProps {
 function AppProvidersComponent({children}: AppProvidersComponentProps) {
 
     return (
-        <NotificationProviderComponent>
-            {children}
-        </NotificationProviderComponent>
+        <ViewPortProviderComponent>
+            <NotificationProviderComponent>
+                {children}
+            </NotificationProviderComponent>
+        </ViewPortProviderComponent>
     );
 }
 
