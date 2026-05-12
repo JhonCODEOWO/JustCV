@@ -45,9 +45,17 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
         editing={editing} 
         onAccept={handleAccept} 
         onEdit={handleEdit}>
-            <div className="relative bg-base-200 border border-base-300 p-4">
-              <div className="grid grid-cols-3 gap-x-3 items-center justify-items-center">
-                <HeaderWithContentComponent positionText="center" className="col-span-3 mb-3" content="Información de tu experiencia laboral" level={4} title="Datos de la empresa" />
+            <div className="p-4">
+              <div className="flex flex-col md:grid md:grid-cols-3 gap-x-3 items-center justify-items-center">
+                
+                <HeaderWithContentComponent 
+                  positionText="center" 
+                  className="col-span-3 mb-3" 
+                  content="Información de tu experiencia laboral" 
+                  level={4} 
+                  title="Datos de la empresa" 
+                />
+                
                 <InputComponent
                   errors={errors}
                   label="Nombre de la empresa"
@@ -102,7 +110,7 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
               <button
                 onClick={() => onDeleteWorkExperienceElement(index)}
                 type="button"
-                className="absolute top-0 right-0 z-50 btn btn-error"
+                className="btn btn-error mt-5"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

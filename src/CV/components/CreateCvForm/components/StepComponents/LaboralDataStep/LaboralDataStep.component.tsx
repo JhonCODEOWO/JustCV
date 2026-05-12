@@ -54,21 +54,24 @@ function LaboralDataStep({
               })
             }
           >
-            Añadir experiencia laboral
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
           </button>
         </HeaderWithContentComponent>
 
         <section className="flex flex-col gap-3 rounded">
+          
           {errors.workExperience && (
             <p className="text-error text-xs col-span-2">
               {errors.workExperience.message}
             </p>
           )}
+          
           {workExperienceFields.length === 0 && (
             <p className="w-full text-center col-span-2">
               Sin experiencias laborales añadidas
             </p>
           )}
+          
           {workExperienceFields.map((experience, index) => {
             return (
               <WorkExperienceElementComponent

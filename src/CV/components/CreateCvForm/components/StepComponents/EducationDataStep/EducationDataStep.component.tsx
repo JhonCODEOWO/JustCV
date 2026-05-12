@@ -50,7 +50,7 @@ function EducationDataStep({
         </HeaderWithContentComponent>
       </section>
 
-      <section className="h-119 overflow-y-auto flex flex-col gap-y-3 py-2">
+      <section className="md:h-119 overflow-y-auto flex flex-col gap-y-3 py-2">
         <p className="text-error text-xs">{errors.education?.message}</p>
         {fields.length === 0 && (
           <div className="flex h-full items-center justify-center">

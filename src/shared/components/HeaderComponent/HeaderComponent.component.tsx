@@ -13,7 +13,7 @@ function HeaderComponent({level, children, className}: HeaderComponentProps) {
         1: 'text-5xl',
         2: 'text-4xl',
         3: 'text-3xl',
-        4: 'text-2xl'
+        4: 'text-xl md:text-2xl'
     };
 
     const styleClasses: string = `font-bold ${className ?? ''} ${styles[level]}`;

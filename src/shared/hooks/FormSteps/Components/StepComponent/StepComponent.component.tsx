@@ -32,7 +32,7 @@ function StepComponent({title, index, currentStepIndex, isLastElement, onStepCli
 
     return (
         <li onClick={() => onStepClick(index)}  className={`step ${stateStep} cursor-pointer hover:bg-base-200`}>
-            {title}
+            <span className="text-xs md:text-base">{title}</span>
         </li>
     );
 }

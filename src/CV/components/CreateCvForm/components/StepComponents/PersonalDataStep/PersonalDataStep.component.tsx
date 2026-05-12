@@ -12,7 +12,7 @@ function PersonalDataStep({register, errors, validate}: StepComponentProps<Creat
         level={3}
       />
       <section>
-        <div className="grid grid-cols-3 gap-x-3">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-3">
           <InputComponent<CreateCvFormBody>
             errors={errors}
             label="Nombre completo"
@@ -89,7 +89,7 @@ function PersonalDataStep({register, errors, validate}: StepComponentProps<Creat
           />
         </div>
 
-        <div className="flex gap-x-3 justify-between">
+        <div className="flex flex-col md:flex-row gap-x-3 justify-between">
           <InputComponent<CreateCvFormBody>
             errors={errors}
             label="Github"

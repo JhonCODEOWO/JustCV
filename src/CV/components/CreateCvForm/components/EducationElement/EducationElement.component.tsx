@@ -34,16 +34,16 @@ function EducationElementComponent({control, errors, index, register, onDeleteEd
   return (
     <EditingContentComponent
       headerContent={
-        <>
-          {titleName} - <span>{institutionName}</span> - <span>{graduationDate}</span>
-        </>
+        <div className="text-sm">
+          <p>{titleName}</p>
+        </div>
       }
       onAccept={handleAccept}
       onEdit={() =>setEditing(true)}
       editing={editing}
       >
-      <div className="border border-base-300 bg-base-200 p-3 rounded">
-        <section className="grid grid-cols-2 items-center justify-between">
+      <div className="p-3">
+        <section className="flex flex-col md:grid md:grid-cols-2 md:items-center md:justify-between">
               <InputComponent<CreateCvFormBody>
                 errors={errors}
                 name={`education.${index}.titleName`}

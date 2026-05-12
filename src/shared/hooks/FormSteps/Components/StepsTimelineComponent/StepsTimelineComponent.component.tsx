@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import HeaderComponent from "../../../../components/HeaderComponent/HeaderComponent.component";
 import { isEndPointer } from "../../Helpers/StepsHelpers";
 import type { Step } from "../../interfaces/StepInterface.interface";
@@ -19,13 +20,13 @@ interface StepsTimelineComponentProps {
  * @returns 
  */
 function StepsTimelineComponent({steps, className = '', actualPhase, title = 'Progreso Actual', onStepWanted, style = 'steps-vertical'}: StepsTimelineComponentProps) {
-    
     return ( 
         <div className={`bg-base-100 rounded p-3 ${className}`}>
             <HeaderComponent level={4}className="text-center">
                     {title}
             </HeaderComponent>
-            <ul className={`steps ${style}`}>
+            <div className="overflow-x-auto">
+                <ul className={`steps ${style}`}>
                 {
                     steps.map(
                         ({title, id}, index) => 
@@ -39,7 +40,8 @@ function StepsTimelineComponent({steps, className = '', actualPhase, title = 'Pr
                             />
                     )
                 }
-            </ul>
+                </ul>
+            </div>
         </div>
      );
 }

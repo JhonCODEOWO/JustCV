@@ -1,7 +1,7 @@
 import { useFieldArray, type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
 import HeaderComponent from "../../../../../shared/components/HeaderComponent/HeaderComponent.component";
-import type { CreateCvFormBody } from "../../CreateCvForm.component";
+import type { CreateCvFormBody } from "../../schemas/CreateCVSchema";
 
 interface CreateAchievementComponentProps {
     /**
@@ -41,11 +41,11 @@ function CreateAchievementComponent({index, control, errors, register}: CreateAc
             </div>
             <p className="text-error text-xs text-center w-full">{errors.workExperience?.[index]?.achievements?.message}</p>
             {/* Renderización de elementos */}
-            <div className="grid grid-cols-3 h-39 overflow-y-auto justify-items-center items-center">
+            <div className="md:grid md:grid-cols-2 md:h-39 overflow-y-auto justify-items-center items-center">
                 {achievements.length === 0 && <p className="col-span-3">No has añadido nada todavía</p>}
                 {achievements.map((achievement, indexAchievement) => {
                     return (
-                        <div key={achievement.id} className="flex gap-x-3 items-center">
+                        <div key={achievement.id} className="flex flex-col gap-x-3 items-center">
                             <InputComponent<CreateCvFormBody> 
                                 errors={errors} 
                                 label="Descripción del logro" 
@@ -59,8 +59,8 @@ function CreateAchievementComponent({index, control, errors, register}: CreateAc
                                     }
                                 }
                             />
-                            <button className="btn btn-warning" type="button" onClick={() => removeAchievement(indexAchievement)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>
+                            <button className="text-xs underline text-error w-full text-start" type="button" onClick={() => removeAchievement(indexAchievement)}>
+                                Quitar logro
                             </button>
                         </div>
                     )
