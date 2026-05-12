@@ -15,7 +15,7 @@ function InputComponent<T extends FieldValues>({label,type, name, register, erro
     const globalInputClasses = 'input outline-0 w-full';
     const errorClasses = (error)? 'border':(error)? 'border border-error': '';
     return (
-        <fieldset className="fieldset">
+        <fieldset className="fieldset w-full">
             <legend className="fieldset-legend flex items-center">{label} {required && <p className="label text-error">*</p>}</legend>
                 <input {...register(name, validations)} type={type} className={`${globalInputClasses} ${errorClasses}`} placeholder="Type here" />
                 {!required && <p className="label">Opcional</p>}
