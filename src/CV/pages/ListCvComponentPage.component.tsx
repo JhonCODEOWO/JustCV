@@ -40,7 +40,7 @@ function ListCvComponentPage() {
     }
 
     return (
-        <main className="p-5 w-[75%] relative mx-auto">
+        <main className="p-5 md:w-[75%] relative mx-auto">
             <HeaderWithContentComponent className="mb-2" level={2} content="Administra tus CVs." title="Inicio">
                 <button className="rounded btn btn-success" onClick={onAddButton}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
