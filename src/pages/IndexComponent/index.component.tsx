@@ -3,13 +3,15 @@ import CardComponent from "../../shared/components/CardComponent/CardComponent.c
 import HeaderComponent from "../../shared/components/HeaderComponent/HeaderComponent.component";
 import HeroComponent from "../../shared/components/HeroComponent/HeroComponent.component";
 import header from "../../assets/background-main-hero.jpg"
+import FooterComponent from "../../shared/components/FooterComponent/FooterComponent.component";
 
 function IndexPageComponent() {
     const navigator = useNavigate();
 
     function handleStartNowClick(){
-        navigator('/creating-cv');
+        navigator('/home');
     }
+
     return (
         <div>
             <HeroComponent 
@@ -23,7 +25,7 @@ function IndexPageComponent() {
                 <HeaderComponent level={2} className="text-center">
                     <p>¿Porqué deberías utilizar JustCV?</p>
                 </HeaderComponent>
-                <div className="grid grid-cols-3 mt-3 w-full">
+                <div className="flex flex-col gap-4 md:grid md:grid-cols-3 mt-3 w-full">
                     <CardComponent 
                         title="Practicidad" 
                         content="Tu solo preocúpate por colocar tus datos lo demás lo hacemos nosotros"
@@ -71,20 +73,13 @@ function IndexPageComponent() {
             </section>
             <section className="bg-base-200 py-20 px-5">
                 <HeaderComponent level={2} className="text-center mb-10">
-                    ¡Pruebalo ahora!
+                    Algunos ejemplos
                 </HeaderComponent>
-                <div className="grid grid-cols-2 gap-x-4 px-7">
-                    <div className="bg-base-300 rounded-md p-3">
-                        
-                    </div>
-                    <div className="bg-base-300 rounded-md p-3">
-                        <HeaderComponent level={3}>
-                            Resultado
-                        </HeaderComponent>
-                        <iframe src="example.pdf" className="w-full h-150"></iframe>
-                    </div>
+                <div className="">
+
                 </div>
             </section>
+            <FooterComponent/>
         </div>
     );
 }
