@@ -11,7 +11,7 @@ import HeaderWithContentComponent from "../../shared/components/HeaderWithConten
 
 function ListCvComponentPage() {
     const navigation = useNavigate();
-    const {cvs, deleteCv} = useCvsContext();
+    const {cvs, deleteCv, itemsLeft} = useCvsContext();
     const {create} = useNotificationsContext();
     
     const onAddButton = () => {
@@ -46,7 +46,7 @@ function ListCvComponentPage() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
                 </button>
             </HeaderWithContentComponent>
-
+            <div>Espacios disponibles para almacenar CVs: {itemsLeft}</div>
             <div className="h-87.5 overflow-y-auto rounded p-2">
                 {
                     cvs.map((cvElement, index) =>
