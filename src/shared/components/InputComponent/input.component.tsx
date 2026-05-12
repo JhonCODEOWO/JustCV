@@ -51,6 +51,7 @@ function InputComponent<T extends FieldValues>({label,type, name, register, erro
                         rtl:peer-focus:left-auto"
                 >
                     {label}
+                    {required && <p className="label text-error">*</p>}
                 </label>
             </div>
             {error && <ErrorTextComponent error={String(error.message)}/>}
