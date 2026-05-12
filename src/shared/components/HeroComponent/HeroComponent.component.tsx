@@ -16,8 +16,8 @@ function HeroComponent({heroContent, title, url_img = '', height = 100, onStartN
             <div className="hero-overlay"></div>
             <div className="hero-content text-center">
                 <div className="max-w-md">
-                <h1 className="text-5xl font-bold">{title}</h1>
-                <p className="py-6">
+                <h1 className="text-4xl md:text-5xl font-bold">{title}</h1>
+                <p className="py-6 text-sm md:text-base">
                     {heroContent}
                 </p>
                 <button className="btn btn-primary" onClick={onStartNowClick}>Empieza ahora</button>
