@@ -34,7 +34,7 @@ function LaboralDataStep({
 }: LaboralDataStepProps) {
   return (
     <>
-      <div className="bg-base-100 p-4 rounded w-full">
+      <div className="bg-base-100 rounded w-full">
         <HeaderWithContentComponent
           title="Experiencia laboral"
           content="Añade tu experiencia laboral"
