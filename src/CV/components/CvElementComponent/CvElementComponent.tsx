@@ -10,6 +10,7 @@ import type { DownloadOptionsElementInterface } from "./interfaces/DownloadOptio
 import type { CvElementDownloadArgsInterface } from "./interfaces/CvElementDownloadArgsInterface.interface";
 import type { CvElementContext } from "../../contexts/CvsContext/interfaces/CvElementContext.interface";
 import OptionsComponent from "../../../shared/components/OptionsComponent/OptionsComponent.component";
+import { useViewPortContext } from "../../../shared/utils/contexts/ViewPortContext/ViewPortContextHook";
 
 
 interface CvElementComponentProps {
@@ -48,9 +49,12 @@ const languageOptions: SelectOpt[] = [
 ]
 
 function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpdateCv }: CvElementComponentProps) {
+    const {deviceType} = useViewPortContext()
+
     const {cv, id: uuid} = element;
     const [downloading ,setDownloading] = useState<boolean>(false);
     const [showModal, setShowModal] = useState<boolean>(false);
+    const [showModalDelete, setShowModalDelete] = useState<boolean>(false);
     const {register, formState: {errors},reset, watch, getValues, trigger} = useForm({
         mode: 'onChange',
         defaultValues: {
@@ -79,6 +83,81 @@ function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpda
         if(result) reset();
         setShowModal(false);
     }
+
+    const handleAcceptDeleteModal = () => {
+        try {
+            onDeleteBtn(index);
+            setShowModalDelete(false);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    if(deviceType === 'smartphone') return (
+        <div className="w-full flex justify-between items-center p-1.5 rounded">
+            <ModalComponent 
+                    title="Personaliza tu descarga" 
+                    onCloseModal={handleCloseModal}
+                    onAccept={handleAccept}
+                    show={showModal}
+                    closeLabel="Cancelar"
+                    titleExtraInfo="Selecciona el formato y el lenguaje para la generación del archivo."
+                >
+                    {
+                        !downloading &&
+                        <div className="flex flex-col">
+                            <InputFileImageComponent<FormData>
+                                maxSize={2}
+                                multipleFiles={false}
+                                errors={errors}
+                                name="profileImage"
+                                register={register}
+                                watch={watch}
+                                label="Selecciona la imagen a utilizar"
+                            />
+                            <div className="flex flex-col gap-y-3.5 mt-5">
+                                <SelectComponent<FormData> errors={errors} name="formatType" label="Formato de descarga" register={register} isOptional={false} selectOptions={formatValues}/>
+                                <SelectComponent<FormData> errors={errors} name="language" label="Idioma" register={register} isOptional={false} selectOptions={languageOptions}/>
+                            </div>
+                        </div>
+                    }
+                    {
+                        downloading &&
+                        <div className="w-full flex justify-center items-center h-full flex-col">
+                            <span className="loading loading-spinner loading-xl"></span>
+                            <p>Generando, espera por favor...</p>
+                        </div>
+                    }
+            </ModalComponent>
+            <ModalComponent
+                onAccept={handleAcceptDeleteModal}
+                onCloseModal={() => setShowModalDelete(false)}
+                show={showModalDelete}
+                title="¿Estás seguro?"
+                titleExtraInfo="Si borras este elemento sin un respaldo lo perderás para siempre"
+            />
+            <div>
+                <p>{element.cv.fullname}</p>
+                <p>{cutString(element.cv.resume, {endIndex: 35})}</p>
+            </div>
+            <OptionsComponent>
+                    <div className="text-xs flex flex-col gap-y-3">
+                        <button className="text-error cursor-pointer flex items-center gap-x-3" onClick={() => setShowModalDelete(true)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zm3.713-4.288Q11 16.426 11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17t.713-.288m4 0Q15 16.426 15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17t.713-.288"/></svg>
+                            <p>Borrar...</p>
+                        </button>
+                        <button className="text-info cursor-pointer flex items-center gap-x-3" onClick={() => onUpdateCv(uuid)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9 15v-4.25L19.625.125L23.8 4.4L13.25 15zm10.6-9.2l1.425-1.4l-1.4-1.4L18.2 4.4zM3 21V3h10.925L7 9.925V17h7.05L21 10.05V21z"/></svg>
+                            <p>Editar...</p>
+                        </button>
+                        <button className="text-success cursor-pointer flex items-center gap-x-3" onClick={() => setShowModal(true)}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 17l4-4l-1.4-1.4l-1.6 1.55V9h-2v4.15L9.4 11.6L8 13zm-8 5V8l6-6h10v20z"/></svg>
+                            <p>Descargar...</p>
+                        </button>
+                    </div>
+            </OptionsComponent>
+        </div>
+    )
 
     return (
         <div className="grid grid-cols-4 gap-x-3 items-center justify-center text-center rounded-lg p-1">
@@ -116,6 +195,13 @@ function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpda
                         </div>
                     }
                 </ModalComponent>
+                <ModalComponent
+                    onAccept={handleAcceptDeleteModal}
+                    onCloseModal={() => setShowModalDelete(false)}
+                    show={showModalDelete}
+                    title="¿Estás seguro?"
+                    titleExtraInfo="Si borras este elemento sin un respaldo lo perderás para siempre"
+                />
             <div>
                 <p className="text-xl font-bold text-center">#{index + 1}</p>
             </div>
@@ -123,9 +209,11 @@ function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpda
                 <p>{cv.fullname}</p>
                 <p className="underline">{cv.email}</p>
             </div>
-            <p className="wrap-break-word text-sm">{cutString(cv.resume, {endIndex: 75})}</p>
+            <p className="wrap-break-word text-sm">
+                {cutString(cv.resume, {endIndex: 75})}
+            </p>
                 <OptionsComponent>
-                    <button className="text-error cursor-pointer flex items-center gap-x-3" onClick={() => onDeleteBtn(index)}>
+                    <button className="text-error cursor-pointer flex items-center gap-x-3" onClick={() => setShowModalDelete(true)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 21q-.825 0-1.412-.587T5 19V6q-.425 0-.712-.288T4 5t.288-.712T5 4h4q0-.425.288-.712T10 3h4q.425 0 .713.288T15 4h4q.425 0 .713.288T20 5t-.288.713T19 6v13q0 .825-.587 1.413T17 21zm3.713-4.288Q11 16.426 11 16V9q0-.425-.288-.712T10 8t-.712.288T9 9v7q0 .425.288.713T10 17t.713-.288m4 0Q15 16.426 15 16V9q0-.425-.288-.712T14 8t-.712.288T13 9v7q0 .425.288.713T14 17t.713-.288"/></svg>
                             <p>Borrar elemento</p>
                         </button>
