@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type UIEvent } from "react";
-import { get, type FieldErrors, type FieldValues, type Path, type UseFormRegister, type UseFormSetError, type UseFormWatch } from "react-hook-form";
+import { get, type FieldErrors, type FieldValues, type Path, type UseFormRegister, type UseFormWatch } from "react-hook-form";
 
 interface InputFileImageComponentProps<T extends FieldValues> {
     name: Path<T>;
