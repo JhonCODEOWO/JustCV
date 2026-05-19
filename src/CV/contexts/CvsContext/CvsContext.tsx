@@ -13,6 +13,10 @@ interface CvsContextType {
     deleteCv: (index: number) => void;
     /** Update the item based on a existing uuid and replace it with the newCv arg data */
     updateCv: (uuid: string, newCv: CreateCvFormBody) => void;
+    /** Make a backup of the current cvs data */
+    backup: (name: string) => void;
+    /** Write the CVs in the file selected into the current cv data */
+    restore: (restoreFile: File) => Promise<void>;
 }
 
 export const CvsContext = createContext<CvsContextType | null>(null);
