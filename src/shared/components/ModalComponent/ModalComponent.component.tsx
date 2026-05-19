@@ -54,7 +54,7 @@ function ModalComponent({show, children, title, onCloseModal, onAccept, closeLab
     return createPortal(
         <div ref={mainContainer} className={`fixed inset-0 bg-[#0006] ${show? 'fade':'fadeOff'}`} onClick={closingModal}>
             <div className="relative w-full h-full">
-                <section ref={modal} className={`flex gap-y-3 flex-col w-1/2 h-[75%] absolute top-1/2 left-1/2 translate-[-50%] bg-base-100 p-5 rounded ${show? 'showUp': 'showDown'}`} onClick={(e) => e.stopPropagation()}>
+                <section ref={modal} className={`flex gap-y-3 flex-col w-[85%] md:w-1/2 absolute top-1/2 left-1/2 translate-[-50%] bg-base-100 p-5 rounded ${show? 'showUp': 'showDown'}`} onClick={(e) => e.stopPropagation()}>
                     <div>
                         <h3 className="font-bold text-3xl">{title}</h3>
                         <p>{titleExtraInfo}</p>
