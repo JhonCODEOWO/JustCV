@@ -1,15 +1,20 @@
 import type React from "react";
-import { useEffect, useRef, useState, type MouseEventHandler } from "react";
+import { useRef, useState } from "react";
 
 interface OptionsComponentProps {
     /** HTML element to show in the options */
     children: React.ReactNode;
 }
 
+/**
+ * Component that render an option button toggle to show the children HTML.
+ * @param param0 
+ * @returns 
+ */
 function OptionsComponent({children}:OptionsComponentProps) {
     const optionsParent = useRef<null | HTMLDivElement>(null);
-    const [mountedOptions, setMountedOptions] = useState(false);
-    const [active, setActive] = useState(false);
+    const [mountedOptions, setMountedOptions] = useState(false); //State to manage if the HTML elements should show or not
+    const [active, setActive] = useState(false); //To manage if the options are active or not
 
     const handleOptionsBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
         if(!mountedOptions) {
@@ -24,7 +29,7 @@ function OptionsComponent({children}:OptionsComponentProps) {
         if(e.animationName === 'DropDownAnimationOut') setMountedOptions(false);
     }
     return ( 
-        <div className="relative inline-block">
+        <div className="relative w-fit">
                 <button 
                     className={`
                             cursor-pointer 
@@ -52,8 +57,8 @@ function OptionsComponent({children}:OptionsComponentProps) {
                             flex 
                             flex-col 
                             absolute 
-                            top-full 
-                            w-full 
+                            top-full
+                            right-full
                             bg-base-200 
                             rounded 
                             gap-y-1 
