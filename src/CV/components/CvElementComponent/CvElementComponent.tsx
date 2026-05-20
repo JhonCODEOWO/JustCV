@@ -94,7 +94,7 @@ function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpda
     }
 
     if(deviceType === 'smartphone') return (
-        <div className="w-full flex justify-between items-center p-1.5 rounded">
+        <div className="w-full flex justify-between items-center p-1.5 rounded shadow-xl shadow-base-300 bg-base-100">
             <ModalComponent 
                     title="Personaliza tu descarga" 
                     onCloseModal={handleCloseModal}
@@ -160,7 +160,7 @@ function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpda
     )
 
     return (
-        <div className="grid grid-cols-4 gap-x-3 items-center justify-center text-center rounded-lg p-1">
+        <div className="grid grid-cols-4 gap-x-3 items-center justify-center text-center rounded-lg p-1 shadow-xl shadow-base-300 bg-base-100">
                 <ModalComponent 
                     title="Personaliza tu descarga" 
                     onCloseModal={handleCloseModal}
@@ -205,12 +205,12 @@ function CvElementComponent({ element, index, onDeleteBtn, onDownloadBtn, onUpda
             <div>
                 <p className="text-xl font-bold text-center">#{index + 1}</p>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col text-sm">
                 <p>{cv.fullname}</p>
                 <p className="underline">{cv.email}</p>
             </div>
             <p className="wrap-break-word text-sm">
-                {cutString(cv.resume, {endIndex: 75})}
+                {cutString(cv.resume, {endIndex: (deviceType === 'tablet')? 45:75})}
             </p>
                 <OptionsComponent>
                     <button className="text-error cursor-pointer flex items-center gap-x-3" onClick={() => setShowModalDelete(true)}>
