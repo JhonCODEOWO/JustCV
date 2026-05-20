@@ -29,7 +29,8 @@ function OptionsComponent({children}:OptionsComponentProps) {
         if(e.animationName === 'DropDownAnimationOut') setMountedOptions(false);
     }
     return ( 
-        <div className="relative w-fit">
+        <div className="flex justify-center">
+            <div className="relative w-fit">
                 <button 
                     className={`
                             cursor-pointer 
@@ -73,6 +74,7 @@ function OptionsComponent({children}:OptionsComponentProps) {
                         {children}
                     </div>
                 }
+            </div>
         </div>
      );
 }
