@@ -95,6 +95,7 @@ function ListCvComponentPage() {
 
     const handleOnCloseModalBackup = () => {
         reset();
+        setShowBackupModal(false);
     }
 
     const handleOnAcceptModalRestore = async () => {
@@ -111,7 +112,7 @@ function ListCvComponentPage() {
     }
 
     return (
-        <main className="p-1.5 w-full md:p-5 md:w-[75%] relative mx-auto">
+        <main className="p-1.5 w-full md:p-5 md:w-[95%] lg:w-[75%] relative mx-auto">
             <ModalComponent
                 onAccept={handleOnAcceptModalBackup}
                 show={showBackupModal}
@@ -143,18 +144,22 @@ function ListCvComponentPage() {
             </ModalComponent>
             <HeaderWithContentComponent className="mb-2" level={2} content="Administra tus CVs." title="Inicio">
                 <div className="flex gap-x-2">
+                    {
+                        cvs.length > 0 &&
+                        <button 
+                            className="btn btn-info tooltip tooltip-left" 
+                            data-tip="Exportar CVs a archivo JSON."
+                            onClick={() => setShowBackupModal(true)}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path fill="currentColor" d="m5.05 22.375l-1.4-1.425L6.6 18H4.35v-2H10v5.65H8v-2.225zM12 22v-8H4V4q0-.825.588-1.412T6 2h8l6 6v12q0 .825-.587 1.413T18 22zm1-13h5l-5-5l5 5l-5-5z" />
+                            </svg>
+                        </button>
+                    }
+                    
                     <button 
-                        className="btn btn-info tooltip tooltip-bottom" 
-                        data-tip="Exportar CVs a archivo JSON."
-                        onClick={() => setShowBackupModal(true)}
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                            <path d="M0 0h24v24H0z" fill="none" />
-                            <path fill="currentColor" d="m5.05 22.375l-1.4-1.425L6.6 18H4.35v-2H10v5.65H8v-2.225zM12 22v-8H4V4q0-.825.588-1.412T6 2h8l6 6v12q0 .825-.587 1.413T18 22zm1-13h5l-5-5l5 5l-5-5z" />
-                        </svg>
-                    </button>
-                    <button 
-                        className="btn btn-warning tooltip tooltip-bottom" 
+                        className="btn btn-warning tooltip tooltip-left" 
                         data-tip="Restaurar a partir de un backup"
                         onClick={() => setShowRestoreModal(true)}
                     >
@@ -163,39 +168,60 @@ function ListCvComponentPage() {
                             <path fill="currentColor" d="M12 14q-.825 0-1.412-.587T10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14m0 7q-3.475 0-6.025-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21" />
                         </svg>
                     </button>
-                    <button className="rounded btn btn-success" onClick={onAddButton}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
-                    </button>
                 </div>
             </HeaderWithContentComponent>
-            <div>Espacios disponibles para almacenar CVs: {itemsLeft}</div>
             {deviceType === 'smartphone' 
                 &&
                 <div role="alert" className="alert alert-warning">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <span>Parece que estás utilizando un smartphone, la experiencia para la creación/edición de tus curriculums es mejor en PC</span>
+                    <span className="text-xs">Parece que estás utilizando un smartphone, la experiencia para la creación/edición de tus curriculums es mejor en PC</span>
                 </div>
             }
-            <div className="h-87.5 overflow-y-auto rounded relative">
+            <div className="relative w-full mt-2">
                 {
                     cvs.length > 0
                     ?
-                    cvs.map((cvElement, index) =>
-                        <div key={cvElement.id} >
-                            <CvElementComponent 
-                            element={cvElement} 
-                            index={index} 
-                            onDeleteBtn={handleDeleteButton}
-                            onDownloadBtn={handleDownloadButton}
-                            onUpdateCv={handleUpdateFormatButton}
-                            />
+                    <div className="rounded-lg bg-base-200 overflow-hidden">
+                        <div className="text-center w-full py-3 bg-base-300">
+                            <p className="font-bold">Cvs creados</p>
                         </div>
-                    )
+                        <div className="h-[calc(100dvh-340px)] overflow-y-auto px-1.5 flex flex-col gap-y-2">
+                            {cvs.map((cvElement, index) =>
+                                <div key={cvElement.id} className="first:mt-2">
+                                    <CvElementComponent 
+                                    element={cvElement} 
+                                    index={index} 
+                                    onDeleteBtn={handleDeleteButton}
+                                    onDownloadBtn={handleDownloadButton}
+                                    onUpdateCv={handleUpdateFormatButton}
+                                    />
+                                </div>
+                            )}
+                            <button className="btn btn-soft btn-success w-full mt-1.5" onClick={onAddButton}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+                                Añadir nuevo
+                            </button>
+                        </div>
+                        <p className="text-sm p-1.5 bg-base-300">Espacios restantes: {itemsLeft}</p>
+                    </div>
                     :
-                    <section className="absolute h-full flex items-center justify-center p-2.5">
-                        <p>¡Oops! Parece que aún no has creado nada, tus nuevos CVs aparecerán aquí.</p>
+                    <section className="min-h-87.5 flex flex-col gap-y-3 items-center justify-center bg-base-200">
+                        <p className="text-center font-semibold">¡Oops! Parece que aún no has creado nada, tus nuevos CVs aparecerán aquí.</p>
+                        <div className="flex flex-col gap-y-1.5 justify-between text-sm">
+                            <button className="btn" onClick={() => setShowRestoreModal(true)}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path fill="currentColor" d="M12 14q-.825 0-1.412-.587T10 12t.588-1.412T12 10t1.413.588T14 12t-.587 1.413T12 14m0 7q-3.475 0-6.025-2.287T3.05 13H5.1q.35 2.6 2.313 4.3T12 19q2.925 0 4.963-2.037T19 12t-2.037-4.962T12 5q-1.725 0-3.225.8T6.25 8H9v2H3V4h2v2.35q1.275-1.6 3.113-2.475T12 3q1.875 0 3.513.713t2.85 1.924t1.925 2.85T21 12t-.712 3.513t-1.925 2.85t-2.85 1.925T12 21" />
+                                </svg>
+                                Restaurar desde un archivo...
+                            </button>
+                            <button className="btn" onClick={onAddButton}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+                                    Añadir nuevo
+                            </button>
+                        </div>
                     </section>
                 }
             </div>

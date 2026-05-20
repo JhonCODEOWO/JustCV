@@ -217,7 +217,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
     }
     
     return (
-        <form className="flex gap-y-6 justify-center" onSubmit={onSubmit}>
+        <form className="flex gap-y-6 justify-center items-center lg:h-[calc(100dvh-64px)]" onSubmit={onSubmit}>
             <div 
                 className={`
                         gap-x-4 gap-y-2 lg:grid lg:grid-cols-3 md:w-[65%] md:h-125 relative
