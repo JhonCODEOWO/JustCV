@@ -2,10 +2,9 @@ import { useWatch, type Control, type FieldErrors, type UseFormRegister, type Us
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
 import CreateAchievementComponent from "../CreateAchievement/CreateAchievement.component";
 import HeaderWithContentComponent from "../../../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
-import type { CreateCvFormBody } from "../../CreateCvForm.component";
-import ShowHideContentComponent from "../../../../../shared/components/EditingContentComponent/EditingContentComponent.component";
 import EditingContentComponent from "../../../../../shared/components/EditingContentComponent/EditingContentComponent.component";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { CreateCvFormBody } from "../../schemas/CreateCVSchema";
 
 interface WorkExperienceComponentProps {
   control: Control<CreateCvFormBody>;
@@ -22,8 +21,12 @@ interface WorkExperienceComponentProps {
  * @returns 
  */
 function WorkExperienceElementComponent({trigger, errors, register, index, control, onDeleteWorkExperienceElement}: WorkExperienceComponentProps) {
-  const {companyName, occupation, achievements} = useWatch({control, name: `workExperience.${index}`});
+  const {companyName, occupation, startDate} = useWatch({control, name: `workExperience.${index}`});
   const [editing, setEditing] = useState(true);
+
+  useEffect(() => {
+    trigger(`workExperience.${index}.endDate`);
+  }, [startDate, index, trigger])
 
   const handleAccept = async () => {
     const validWorkExperience = await trigger(`workExperience.${index}`);
@@ -81,6 +84,13 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
                       value: true,
                     },
                   }}
+                  type="date"
+                />
+                <InputComponent
+                  errors={errors}
+                  label="Fecha de finalización"
+                  name={`workExperience.${index}.endDate`}
+                  register={register}
                   type="date"
                 />
                 <InputComponent
