@@ -13,7 +13,7 @@ const sizeClasses: Record<CommonSizes, string> = {
 }
 
 function ErrorTextComponent({error, size = 'xs'}: ErrorTextComponentProps) {
-    return ( <span className={`text-error text-lg ${sizeClasses[size]}`}>
+    return ( <span className={`text-error text-lg font-normal ${sizeClasses[size]}`}>
         {error}
     </span> );
 }
