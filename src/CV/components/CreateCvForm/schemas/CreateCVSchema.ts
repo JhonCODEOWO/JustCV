@@ -51,7 +51,25 @@ const WorkExperience = z.object({
     companyName: z.string().min(1, 'El nombre de la empresa es requerido'),
     occupation: z.string().min(1, 'Es necesario conocer la ocupación de tu puesto.'),
     startDate: z.string().min(1, 'Es necesario conocer la fecha en la que iniciaste.'),
+    endDate: z.string().optional().or(z.literal('')),
     achievements: z.array(Achievement).min(1, 'Coloca al menos 1 logro destacable.')
+}).superRefine((data, ctx) => {
+    const startDate = new Date(data.startDate);
+    const endDate = data.endDate? new Date(data.endDate): null;
+
+    if(startDate > new Date()) 
+        ctx.addIssue({
+            code: 'custom',
+            message: 'No puedes colocar una fecha de inicio mayor a la actual.',
+            path: ['startDate']
+        });
+
+    if((endDate && !isNaN(endDate.getDate())) && endDate < startDate) 
+        ctx.addIssue({
+            code: 'custom', 
+            message: 'La fecha de finalización no puede ser menor a la fecha de inicio.',
+            path: ['endDate']
+        });
 })
 
 export const CreateCVSchema = z.object({
