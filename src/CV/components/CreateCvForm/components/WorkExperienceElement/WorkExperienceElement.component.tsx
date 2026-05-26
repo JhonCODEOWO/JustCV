@@ -22,15 +22,26 @@ interface WorkExperienceComponentProps {
  */
 function WorkExperienceElementComponent({trigger, errors, register, index, control, onDeleteWorkExperienceElement}: WorkExperienceComponentProps) {
   const {companyName, occupation, startDate} = useWatch({control, name: `workExperience.${index}`});
-  const [editing, setEditing] = useState(true);
+  const titleElement = [companyName, occupation].filter(val => val.trim().length > 0).join('-') ||  'Sin título - Sin ocupación';
+  const [editing, setEditing] = useState(false);
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    const initializeValidState = async () => {
+      const validState = await trigger();
+      setIsValid(validState);
+    }
+
+    initializeValidState();
+  }, [trigger])
 
   useEffect(() => {
     trigger(`workExperience.${index}.endDate`);
   }, [startDate, index, trigger])
 
   const handleAccept = async () => {
-    const validWorkExperience = await trigger(`workExperience.${index}`);
-    if(!validWorkExperience) return;
+    const valid = await trigger();
+    setIsValid(valid);
     setEditing(false);
   }
   const handleEdit = () => {
@@ -41,19 +52,56 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
     <>
       <EditingContentComponent 
         headerContent={
-          <>
-            {companyName} - {occupation}
-          </>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-x-1.5 items-center">
+              {!isValid && !editing && 
+                <div className="text-error">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path fill="currentColor" d="M12.713 16.713Q13 16.425 13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17t.713-.288M11 13h2V7h-2zm1 9q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22" />
+                  </svg>
+                </div>
+              }
+              {isValid && !editing 
+                && 
+                  <p className="text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
+                      <path d="M0 0h512v512H0z" fill="none" />
+                      <path fill="currentColor" fillRule="evenodd" d="M256 42.667C138.18 42.667 42.667 138.18 42.667 256S138.18 469.334 256 469.334S469.334 373.82 469.334 256S373.821 42.667 256 42.667m80.336 137.114l30.167 30.167l-131.836 132.388l-79.083-79.083l30.166-30.167l48.917 48.917z" />
+                    </svg>
+                  </p>
+              }
+              <p>{titleElement}</p>
+            </div>
+            
+            <button
+                onClick={() => onDeleteWorkExperienceElement(index)}
+                type="button"
+                className="text-error cursor-pointer"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"
+                  />
+                </svg>
+              </button>
+          </div>
         } 
         editing={editing} 
         onAccept={handleAccept} 
         onEdit={handleEdit}>
             <div className="p-4">
-              <div className="flex flex-col md:grid md:grid-cols-3 gap-x-3 items-center justify-items-center">
+              <div className="flex flex-col md:grid md:grid-cols-2 gap-x-3 justify-items-center">
                 
                 <HeaderWithContentComponent 
                   positionText="center" 
-                  className="col-span-3 mb-3" 
+                  className="col-span-2 mb-3" 
                   content="Información de tu experiencia laboral" 
                   level={4} 
                   title="Datos de la empresa" 
@@ -75,6 +123,20 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
 
                 <InputComponent
                   errors={errors}
+                  label="Cargo desempeñado"
+                  name={`workExperience.${index}.occupation`}
+                  register={register}
+                  validations={{
+                    required: {
+                      message: "La descripción de la ocupación es obligatoria",
+                      value: true,
+                    },
+                  }}
+                  type="text"
+                />
+
+                                <InputComponent
+                  errors={errors}
                   label="Fecha de inicio"
                   name={`workExperience.${index}.startDate`}
                   register={register}
@@ -93,19 +155,6 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
                   register={register}
                   type="date"
                 />
-                <InputComponent
-                  errors={errors}
-                  label="Cargo desempeñado"
-                  name={`workExperience.${index}.occupation`}
-                  register={register}
-                  validations={{
-                    required: {
-                      message: "La descripción de la ocupación es obligatoria",
-                      value: true,
-                    },
-                  }}
-                  type="text"
-                />
               </div>
 
               <div className="mt-4">
@@ -116,24 +165,6 @@ function WorkExperienceElementComponent({trigger, errors, register, index, contr
                   register={register}
                 />
               </div>
-
-              <button
-                onClick={() => onDeleteWorkExperienceElement(index)}
-                type="button"
-                className="btn btn-error mt-5"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"
-                  />
-                </svg>
-              </button>
             </div>
       </EditingContentComponent>
     </>

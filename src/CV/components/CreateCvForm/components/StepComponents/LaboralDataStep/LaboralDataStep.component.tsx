@@ -8,6 +8,7 @@ import type {
   UseFieldArrayAppend,
   UseFormTrigger,
 } from "react-hook-form";
+import ErrorTextComponent from "../../../../../../shared/components/ErrorTextComponent/ErrorTextComponent.component";
 
 interface LaboralDataStepProps extends StepComponentProps<CreateCvFormBody> {
   appendWorkExperience: UseFieldArrayAppend<CreateCvFormBody, "workExperience">;
@@ -26,8 +27,6 @@ function LaboralDataStep({
   workExperienceFields,
   errors,
   register,
-  validate,
-  prevPhase,
   control,
   trigger,
   onDeletedWorkElement
@@ -35,28 +34,14 @@ function LaboralDataStep({
   return (
     <>
       <div className="bg-base-100 rounded w-full">
-        <HeaderWithContentComponent
+        <div className="mb-3">
+          <HeaderWithContentComponent
           title="Experiencia laboral"
           content="Añade tu experiencia laboral"
           level={3}
           positionText="start"
-          className="mb-4"
-        >
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={() =>
-              appendWorkExperience({
-                achievements: [],
-                companyName: "",
-                occupation: "",
-                startDate: "",
-              })
-            }
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
-          </button>
-        </HeaderWithContentComponent>
+          />
+        </div>
 
         <section className="flex flex-col gap-3 rounded">
           
@@ -66,27 +51,61 @@ function LaboralDataStep({
             </p>
           )}
           
-          {workExperienceFields.length === 0 && (
-            <p className="w-full text-center col-span-2">
-              Sin experiencias laborales añadidas
-            </p>
-          )}
-          
-          {workExperienceFields.map((experience, index) => {
-            return (
-              <WorkExperienceElementComponent
-                trigger={trigger}
-                control={control}
-                errors={errors}
-                index={index}
-                onDeleteWorkExperienceElement={
-                  onDeletedWorkElement
-                }
-                register={register}
-                key={experience.id}
-              />
-            );
-          })}
+          {workExperienceFields.length === 0
+            ?
+              (
+                <div className="w-full text-center col-span-2 flex flex-col items-center gap-y-3">
+                  <p>Sin experiencias laborales añadidas</p>
+                  <button 
+                    className="btn btn-soft w-fit"
+                    onClick={() =>
+                            appendWorkExperience({
+                                achievements: [],
+                                companyName: "",
+                                occupation: "",
+                                startDate: "",
+                                endDate: "",
+                              })
+                            }
+                  >
+                    Pulsa aquí para añadir el primero.
+                  </button>
+                </div>
+              )
+            :
+              <>
+                {errors.workExperience && <ErrorTextComponent error="Asegúrate de corregir todos los errores de las experiencias laborales."/>}
+                {workExperienceFields.map((experience, index) => (
+                  <WorkExperienceElementComponent
+                      trigger={trigger}
+                      control={control}
+                      errors={errors}
+                      index={index}
+                      onDeleteWorkExperienceElement={
+                        onDeletedWorkElement
+                      }
+                      register={register}
+                      key={experience.id}
+                    />
+                ))}
+                <button
+                    type="button"
+                    className="btn btn-soft"
+                    onClick={() =>
+                      appendWorkExperience({
+                        achievements: [],
+                        companyName: "",
+                        occupation: "",
+                        startDate: "",
+                        endDate: "",
+                      })
+                    }
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+                    Añadir nueva experiencia laboral
+                  </button>
+              </>
+          }
         </section>
       </div>
     </>

@@ -2,6 +2,7 @@ import { useFieldArray, type Control, type FieldErrors, type UseFormRegister } f
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
 import HeaderComponent from "../../../../../shared/components/HeaderComponent/HeaderComponent.component";
 import type { CreateCvFormBody } from "../../schemas/CreateCVSchema";
+import ErrorTextComponent from "../../../../../shared/components/ErrorTextComponent/ErrorTextComponent.component";
 
 interface CreateAchievementComponentProps {
     /**
@@ -31,53 +32,63 @@ function CreateAchievementComponent({index, control, errors, register}: CreateAc
         <div>
             {/* Header del componente */}
             <div className="flex items-center justify-center gap-x-3 mb-4">
-                <HeaderComponent level={4}>
-                Logros destacados
+                <HeaderComponent level={4} className="flex flex-col justify-center">
+                    Logros destacados
+                    <ErrorTextComponent error={errors.workExperience?.[index]?.achievements?.message ?? ''}/>
                 </HeaderComponent>
             </div>
-            <p className="text-error text-xs text-center w-full">{errors.workExperience?.[index]?.achievements?.message}</p>
             {/* Renderización de elementos */}
-            <div className="md:grid md:grid-cols-2 justify-items-center items-center">
+            <div className="p-3 justify-items-center items-center bg-base-300">
                 {achievements.length === 0 
-                    && 
-                    <section className="col-span-3">
-                        <p>
+                    ? 
+                    <section className="col-span-3 flex flex-col items-center py-3">
+                        <p className="text-">
                             No has añadido nada todavía
                         </p>
-                        <button type="button" className="btn btn-success rounded-full md:col-span-2" onClick={() => appendAchievement({description: ''})} >
+                        <button type="button" className="btn btn-soft rounded-full md:col-span-2 mt-3" onClick={() => appendAchievement({description: ''})} >
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
                             Añadir nuevo
                         </button>
                     </section>
+                    :
+                    <>
+                        {achievements.map((achievement, indexAchievement) => {
+                            return (
+                                <div key={achievement.id} className="flex my-1.5 items-stretch bg-base-200 rounded overflow-hidden">
+                                    <div className="p-3 w-full">
+                                        <InputComponent<CreateCvFormBody> 
+                                            errors={errors} 
+                                            label="Descripción del logro" 
+                                            name={`workExperience.${index}.achievements.${indexAchievement}.description`} 
+                                            register={register}
+                                            type="text"
+                                            key={achievement.id}
+                                            validations={
+                                                {
+                                                    required: {value: true, message: 'Es necesario describir el logro'}
+                                                }
+                                            }
+                                        />
+                                    </div>
+                                    <button className="bg-error" type="button" onClick={() => removeAchievement(indexAchievement)}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                            <path d="M0 0h24v24H0z" fill="none" />
+                                            <path fill="currentColor" d="M19 4h-3.5l-1-1h-5l-1 1H5v2h14M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            )
+                        })}
+                        <button 
+                            type="button" 
+                            className="btn btn-soft w-full mt-3" 
+                            onClick={() => appendAchievement({description: ''})}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
+                            Añadir logro destacado
+                        </button>
+                    </>
                 }
-                {achievements.map((achievement, indexAchievement) => {
-                    return (
-                        <div key={achievement.id} className="flex gap-x-3 items-center">
-                            <InputComponent<CreateCvFormBody> 
-                                errors={errors} 
-                                label="Descripción del logro" 
-                                name={`workExperience.${index}.achievements.${indexAchievement}.description`} 
-                                register={register}
-                                type="text"
-                                key={achievement.id}
-                                validations={
-                                    {
-                                        required: {value: true, message: 'Es necesario describir el logro'}
-                                    }
-                                }
-                            />
-                            <button className="text-xs underline text-error text-start" type="button" onClick={() => removeAchievement(indexAchievement)}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m8.4 17l3.6-3.6l3.6 3.6l1.4-1.4l-3.6-3.6L17 8.4L15.6 7L12 10.6L8.4 7L7 8.4l3.6 3.6L7 15.6zm3.6 5q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
-                            </button>
-                        </div>
-                    )
-                })}
-                {achievements.length > 0 && (
-                    <button type="button" className="btn btn-success rounded-full md:col-span-2" onClick={() => appendAchievement({description: ''})} >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>
-                        Añadir nuevo
-                    </button>
-                )}
             </div>
         </div>
      );
