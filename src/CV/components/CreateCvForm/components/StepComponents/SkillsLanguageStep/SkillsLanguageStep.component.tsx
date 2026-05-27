@@ -20,8 +20,6 @@ interface SkillsLanguageProps extends StepComponentProps<CreateCvFormBody> {
 function SkillsLanguageStep({
   errors,
   register,
-  validate,
-  prevPhase,
   skills,
   languages,
   appendLanguage,

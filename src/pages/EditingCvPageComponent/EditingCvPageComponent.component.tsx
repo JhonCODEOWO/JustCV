@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useCvsContext } from "../../CV/contexts/CvsContext/hooks/CvsContextHook";
 import { useEffect, useState } from "react";
 import type { CvElementContext } from "../../CV/contexts/CvsContext/interfaces/CvElementContext.interface";
-import HeaderComponent from "../../shared/components/HeaderComponent/HeaderComponent.component";
 import CreateCvForm from "../../CV/components/CreateCvForm/CreateCvForm.component";
 
 function EditingPageComponent() {

@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import HeaderComponent from "../../../../components/HeaderComponent/HeaderComponent.component";
 import { isEndPointer } from "../../Helpers/StepsHelpers";
 import type { Step } from "../../interfaces/StepInterface.interface";

@@ -59,7 +59,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
         }
     ]);
     
-    const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues, reset, getFieldState} = useForm<CreateCvFormBody>({
+    const { register, trigger, control,formState: {errors}, getValues, reset} = useForm<CreateCvFormBody>({
         mode: 'onChange',
         defaultValues: {
             fullname: '',
@@ -143,7 +143,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
      * @param step The step element object requested.
      * @returns void
      */
-    const handleWantedStep = async (requestedIndex: number, step: Step) => {
+    const handleWantedStep = async (requestedIndex: number, _step: Step) => {
         const toEvaluate = elementsBefore(requestedIndex);
         const toValidate: Promise<boolean>[] = [];
 

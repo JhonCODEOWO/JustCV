@@ -16,7 +16,7 @@ function OptionsComponent({children}:OptionsComponentProps) {
     const [mountedOptions, setMountedOptions] = useState(false); //State to manage if the HTML elements should show or not
     const [active, setActive] = useState(false); //To manage if the options are active or not
 
-    const handleOptionsBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleOptionsBtn = (_e: React.MouseEvent<HTMLButtonElement>) => {
         if(!mountedOptions) {
             setMountedOptions(true);
             setActive(true);

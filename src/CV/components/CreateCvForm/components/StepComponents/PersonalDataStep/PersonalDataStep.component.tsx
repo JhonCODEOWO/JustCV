@@ -3,7 +3,7 @@ import InputComponent from "../../../../../../shared/components/InputComponent/i
 import type { CreateCvFormBody } from "../../../schemas/CreateCVSchema";
 import type { StepComponentProps } from "../interfaces/StepComponentProps";
 
-function PersonalDataStep({register, errors, validate}: StepComponentProps<CreateCvFormBody>) {
+function PersonalDataStep({register, errors}: StepComponentProps<CreateCvFormBody>) {
   return (
     <>
       <HeaderWithContentComponent

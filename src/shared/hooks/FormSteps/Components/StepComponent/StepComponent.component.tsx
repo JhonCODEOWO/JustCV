@@ -1,4 +1,4 @@
-import {isStartPointer, isValidInTimeLineRange } from "../../Helpers/StepsHelpers";
+import {isValidInTimeLineRange } from "../../Helpers/StepsHelpers";
 
 interface StepComponentProps {
     /**
@@ -18,7 +18,7 @@ interface StepComponentProps {
     onStepClick: (stepIndex: number) => void;
 }
 
-function StepComponent({title, index, currentStepIndex, isLastElement, onStepClick}:StepComponentProps) {
+function StepComponent({title, index, currentStepIndex, onStepClick}:StepComponentProps) {
     
     const stepCompleted = isValidInTimeLineRange(index, currentStepIndex);
     const isActive = currentStepIndex === index;

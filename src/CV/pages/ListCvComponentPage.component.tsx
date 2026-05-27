@@ -54,7 +54,6 @@ function ListCvComponentPage() {
         formState: {errors: restoreFormErrors}, 
         trigger: restoreFormTrigger, 
         getValues: restoreFormGetValues,
-        reset: restoreFormReset
     } = useForm<RestoreFormBody>({
                 mode: 'onChange',
                 resolver: zodResolver(RestoreForm)
