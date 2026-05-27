@@ -2,11 +2,14 @@ import { useState } from "react";
 import EditingContentComponent from "../EditingContentComponent/EditingContentComponent.component";
 
 interface FieldArrayElementComponentProps {
+    /** The form content of the field array element */
     children: React.ReactNode;
     title: string;
     onDelete: (index: number) => void;
-    onCollapse: () => Promise<void>;
+    /** A optional function reference to execute operations from the parent if is necessary*/
+    onCollapse?: () => Promise<void>;
     index: number;
+    /** The flag to show error or success icon */
     isValid: boolean;
 }
 
@@ -14,7 +17,7 @@ function FieldArrayElementComponent({title, children, onDelete, isValid, index, 
     const [editing, setEditing] = useState(false);
     const onClickCollapse = () => {
         setEditing(false);
-        onCollapse();
+        if(onCollapse) onCollapse();
     }
     return ( 
         <EditingContentComponent
