@@ -2,14 +2,14 @@ import * as z from "zod";
 
 export const fileList = z.instanceof(FileList);
 
-const Education = z.object({
+export const Education = z.object({
     titleName: z.string().min(1, 'Es obligatorio colocar el nombre del título'),
     institutionName: z.string().min(1, 'Es necesario conocer el nombre de la institución'),
     graduationDate: z.string().min(1, 'Debes colocar completa la fecha'),
     type: z.enum(['curso', 'titulo'], 'No se admite otro tipo de dato, selecciona curso o título')
 });
 
-const Project = z.object({
+export const Project = z.object({
     title: z.string().min(3),
     description: z.string().min(10),
     link: z.httpUrl().or(z.literal('')).optional(),
@@ -26,7 +26,7 @@ const Language = z.object({
     level: z.enum(['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Nativo'])
 })
 
-const Certification = z.object({
+export const Certification = z.object({
     name: z.string().min(1),
     institution: z.string().min(1),
     year: z.string().optional(),
@@ -47,7 +47,7 @@ const Achievement = z.object({
     description: z.string().min(1, 'Describe el logro destacado'),
 })
 
-const WorkExperience = z.object({
+export const WorkExperience = z.object({
     companyName: z.string().min(1, 'El nombre de la empresa es requerido'),
     occupation: z.string().min(1, 'Es necesario conocer la ocupación de tu puesto.'),
     startDate: z.string().min(1, 'Es necesario conocer la fecha en la que iniciaste.'),
