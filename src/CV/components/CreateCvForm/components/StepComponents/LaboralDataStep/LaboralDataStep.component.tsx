@@ -6,7 +6,6 @@ import type {
   Control,
   FieldArrayWithId,
   UseFieldArrayAppend,
-  UseFormTrigger,
 } from "react-hook-form";
 import ErrorTextComponent from "../../../../../../shared/components/ErrorTextComponent/ErrorTextComponent.component";
 
@@ -17,7 +16,6 @@ interface LaboralDataStepProps extends StepComponentProps<CreateCvFormBody> {
     "workExperience",
     "id"
   >[];
-  trigger: UseFormTrigger<CreateCvFormBody>;
   control: Control<CreateCvFormBody>;
   onDeletedWorkElement: (id: number) => void;
 }
@@ -28,7 +26,6 @@ function LaboralDataStep({
   errors,
   register,
   control,
-  trigger,
   onDeletedWorkElement
 }: LaboralDataStepProps) {
   return (
@@ -77,7 +74,6 @@ function LaboralDataStep({
                 {errors.workExperience && <ErrorTextComponent error="Asegúrate de corregir todos los errores de las experiencias laborales."/>}
                 {workExperienceFields.map((experience, index) => (
                   <WorkExperienceElementComponent
-                      trigger={trigger}
                       control={control}
                       errors={errors}
                       index={index}

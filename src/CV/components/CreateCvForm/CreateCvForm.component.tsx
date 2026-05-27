@@ -59,7 +59,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
         }
     ]);
     
-    const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues, reset} = useForm<CreateCvFormBody>({
+    const { register, handleSubmit, trigger, watch, control,formState: {errors, isSubmitted, isDirty, isValid, dirtyFields, touchedFields}, resetField, setError, clearErrors, getValues, reset, getFieldState} = useForm<CreateCvFormBody>({
         mode: 'onChange',
         defaultValues: {
             fullname: '',
@@ -164,7 +164,6 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
                             errors={errors} 
                             fields={fields} 
                             register={register}
-                            trigger={trigger}
                             validate={validate}
                             prevPhase={prevPhase}
                             onDeleteEducationElement={handleDeleteEducationElement}
@@ -175,7 +174,6 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
                             errors={errors}
                             onDeletedWorkElement={handleDeleteWorkExperienceElement}
                             register={register}
-                            trigger={trigger}
                             validate={validate}
                             workExperienceFields={workExperienceFields}
                             prevPhase={prevPhase}
@@ -201,6 +199,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
                             removeProject={removeProject}
                             validate={validate}
                             prevPhase={prevPhase}
+                            control={control}
                         />,
         'finalPhase': <>
                         <HeaderWithContentComponent level={3} title="¡Ya hemos terminado!" content="Verifica que la información sea correcta, pero no te preocupes si decides guardarla, podrás editarla cuando quieras."/>
@@ -213,6 +212,7 @@ function CreateCvForm({cv, id}: CreateCvFormProps) {
                             removeCertification={removeCertification}
                             validate={validate}
                             prevPhase={prevPhase}
+                            control={control}
                             />
     }
     

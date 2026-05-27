@@ -1,19 +1,18 @@
-import type { Control, FieldArray, FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form";
+import type { Control, FieldArrayWithId, UseFieldArrayAppend, UseFieldArrayRemove } from "react-hook-form";
 import ErrorTextComponent from "../../../../../../shared/components/ErrorTextComponent/ErrorTextComponent.component";
 import HeaderWithContentComponent from "../../../../../../shared/components/HeaderWithContentComponent/HeaderWithContentComponent";
-import InputComponent from "../../../../../../shared/components/InputComponent/input.component";
-import TextAreaComponent from "../../../../../../shared/components/TextAreaComponent/TextAreaComponent.component";
 import type { CreateCvFormBody } from "../../../schemas/CreateCVSchema";
 import type { StepComponentProps } from "../interfaces/StepComponentProps";
-import EditingContentComponent from "../../../../../../shared/components/EditingContentComponent/EditingContentComponent.component";
+import ProjectElementComponent from "../../ProjectElement/ProjectElementComponent";
 
 interface ProjectsStepProps extends StepComponentProps<CreateCvFormBody> {
     appendProject: UseFieldArrayAppend<CreateCvFormBody, "projects">
     projects: FieldArrayWithId<CreateCvFormBody, "projects", "id">[],
     removeProject: UseFieldArrayRemove,
+    control: Control<CreateCvFormBody>
 }
 
-function ProjectsStep({errors, register, validate, prevPhase, appendProject, projects, removeProject}: ProjectsStepProps) {
+function ProjectsStep({errors, register, appendProject, projects, removeProject, control}: ProjectsStepProps) {
   return (
     <>
       <HeaderWithContentComponent
@@ -37,40 +36,17 @@ function ProjectsStep({errors, register, validate, prevPhase, appendProject, pro
       <section className="flex flex-col gap-y-1.5 my-1.5">
         {projects.length > 0 ? (
           projects.map((project, index) => (
-            <div key={project.id} className="px-1 py-1.5 md:py-3 bg-base-200 rounded">
-              <div className="grid grid-cols-2 gap-x-3">
-                <InputComponent<CreateCvFormBody>
-                  errors={errors}
-                  label="Nombre del proyecto"
-                  name={`projects.${index}.title`}
-                  register={register}
-                  type="text"
-                  validations={{ required: true }}
-                />
-                <InputComponent<CreateCvFormBody>
-                  errors={errors}
-                  label="Link"
-                  name={`projects.${index}.link`}
-                  register={register}
-                  type="text"
-                  validations={{}}
-                />
-              </div>
-              <TextAreaComponent
-                errors={errors}
-                label="Descripción del proyecto"
-                name={`projects.${index}.description`}
-                register={register}
-                required={true}
-                placeholder="El proyecto fué realizado con..."
-              />
-              <button type="button" className="text-error" onClick={() => removeProject(index)}>
-                Eliminar
-              </button>
-            </div>
+            <ProjectElementComponent 
+              control={control} 
+              errors={errors} 
+              register={register} 
+              index={index} 
+              removeProject={() => removeProject(index)}
+              key={project.id}
+            />
           ))
         ) : (
-          <div className="flex flex-col items-center justify-center h-[400px] px-4">
+          <div className="flex flex-col items-center justify-center h-100 px-4">
             <p className="font-bold">Aún no has agregado nada.</p>
             <p className="text-info">
               Si lo deseas puedes continuar, no es obligatorio añadir proyectos

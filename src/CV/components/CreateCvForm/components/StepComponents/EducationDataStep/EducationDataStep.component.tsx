@@ -2,12 +2,11 @@ import HeaderWithContentComponent from "../../../../../../shared/components/Head
 import type { CreateCvFormBody } from "../../../schemas/CreateCVSchema";
 import EducationElementComponent from "../../EducationElement/EducationElement.component";
 import type { StepComponentProps } from "../interfaces/StepComponentProps";
-import type { Control, FieldArrayWithId, UseFieldArrayAppend, UseFormTrigger } from "react-hook-form";
+import type { Control, FieldArrayWithId, UseFieldArrayAppend } from "react-hook-form";
 
 interface EducationDataStepProps extends StepComponentProps<CreateCvFormBody>{
     fields: FieldArrayWithId<CreateCvFormBody, "education", "id">[],
     append: UseFieldArrayAppend<CreateCvFormBody, "education">
-    trigger: UseFormTrigger<CreateCvFormBody>,
     control: Control<CreateCvFormBody>,
     onDeleteEducationElement: (id: number) => void;
 }
@@ -15,13 +14,10 @@ interface EducationDataStepProps extends StepComponentProps<CreateCvFormBody>{
 function EducationDataStep({
   errors,
   register,
-  validate,
   append,
   fields,
   control,
-  trigger,
-  prevPhase,
-  onDeleteEducationElement
+  onDeleteEducationElement,
 }: EducationDataStepProps) {
 
   return (
@@ -60,7 +56,6 @@ function EducationDataStep({
         {fields.map((education, index) => {
           return (
             <EducationElementComponent
-              trigger={trigger}
               control={control}
               errors={errors}
               index={index}

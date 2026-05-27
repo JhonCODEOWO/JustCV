@@ -1,8 +1,7 @@
-import { get, useWatch, type Control, type FieldErrors, type UseFormRegister, type UseFormTrigger } from "react-hook-form";
+import { get, useWatch, type Control, type FieldErrors, type UseFormRegister } from "react-hook-form";
 import InputComponent from "../../../../../shared/components/InputComponent/input.component";
-import { useState } from "react";
-import EditingContentComponent from "../../../../../shared/components/EditingContentComponent/EditingContentComponent.component";
-import type { CreateCvFormBody } from "../../schemas/CreateCVSchema";
+import { Education, type CreateCvFormBody } from "../../schemas/CreateCVSchema";
+import FieldArrayElementComponent from "../../../../../shared/components/FieldArrayElementComponent/FieldArrayElementComponent";
 
 
 
@@ -11,7 +10,6 @@ interface EducationElementComponentProps {
     errors: FieldErrors<CreateCvFormBody>,
     index: number;
     register: UseFormRegister<CreateCvFormBody>,
-    trigger: UseFormTrigger<CreateCvFormBody>
     onDeleteEducationElement: (id: number) => void;
 }
 
@@ -20,28 +18,23 @@ interface EducationElementComponentProps {
  * @param param0 
  * @returns 
  */
-function EducationElementComponent({control, errors, index, register, onDeleteEducationElement, trigger}: EducationElementComponentProps) {
-  const {graduationDate, institutionName, titleName, type} = useWatch({control: control, name: `education.${index}`});
-  const [editing, setEditing] = useState(true); //Editing mode
+function EducationElementComponent({control, errors, index, register, onDeleteEducationElement}: EducationElementComponentProps) {
+  const values = useWatch({control: control, name: `education.${index}`});
+  const title = [values.titleName, values.graduationDate].filter(value => value.trim().length > 0).join(' | ') || 'Título | Fecha de Obtención'
   const selectError = get(errors, `education.${index}.type`); //Get the error for the path field type
-  
-  const handleAccept = async () => {
-    const validEducation = await trigger(`education.${index}`);
-    if(!validEducation) return;
-    setEditing(false);
+
+  const handleCollapse = async () => {
+    
   }
 
   return (
-    <EditingContentComponent
-      headerContent={
-        <div className="text-sm">
-          <p>{titleName}</p>
-        </div>
-      }
-      onAccept={handleAccept}
-      onEdit={() =>setEditing(true)}
-      editing={editing}
-      >
+    <FieldArrayElementComponent
+      onDelete={() => onDeleteEducationElement(index)}
+      onCollapse={handleCollapse}
+      isValid={Education.safeParse(values).success}
+      index={index}
+      title={title}
+    >
       <div className="p-3">
         <section className="flex flex-col md:grid md:grid-cols-2 md:items-center md:justify-between">
               <InputComponent<CreateCvFormBody>
@@ -95,18 +88,10 @@ function EducationElementComponent({control, errors, index, register, onDeleteEd
                 </select>
                 {selectError && <p className="text-xs text-error">{selectError.message}</p>}
               </fieldset>
-              <div className="col-span-2 text-end">
-                <button
-                type="button"
-                className="btn btn-error"
-                onClick={() => onDeleteEducationElement(index)}
-                >
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M15 18v-2h4v2zm0-8V8h7v2zm0 4v-2h6v2zM3 8H2V6h4V4.5h4V6h4v2h-1v9q0 .825-.587 1.413T11 19H5q-.825 0-1.412-.587T3 17z"/></svg>
-              </button>
-            </div>
           </section>
       </div>
-    </EditingContentComponent>
+    </FieldArrayElementComponent>
+    
   );
 }
 
