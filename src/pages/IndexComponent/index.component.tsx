@@ -29,45 +29,70 @@ function IndexPageComponent() {
                     <CardComponent 
                         title="Practicidad" 
                         content="Tu solo preocúpate por colocar tus datos lo demás lo hacemos nosotros"
+                        className="bg-primary"
                     />
                     <CardComponent 
                         title="Formatos actuales" 
                         content="Genera CV en cualquier tipo de formato popular actual."
+                        className="bg-primary"
                     />
                     <CardComponent 
                         title="Es gratis" 
                         content="Utilizar este generador no tiene ningún costo, a menos que decidas cooperar para que el dev tome un café por supuesto ;)"
+                        className="bg-primary"
                     />
                 </div>
             </section>
-            <section className="py-20 px-6 bg-base-300">
-                <HeaderComponent level={2} className="text-center mb-3">
+            <section className="py-20 px-6 bg-base-200">
+                <HeaderComponent level={2} className="text-center mb-10">
                     ¿Como funciona?
                 </HeaderComponent>
-                <div className="flex flex-col md:flex-row justify-center items-center">
-                    <div className="w-73 bg-base-200 p-5 rounded">
-                        <HeaderComponent level={3}>
+                <div className="flex flex-col md:items-stretch md:flex-row items-center justify-center">
+                    <div className="w-73 bg-base-300 p-5 rounded">
+                        <HeaderComponent level={4}>
                             Ingresa tu información
                         </HeaderComponent>
-                        <p>Si, literalmente solo añade la información de tu perfil profesional ;D</p>
+                        <div className="flex justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <path fill="none" stroke="currentColor" strokeWidth="2" d="m11.996 8.336l3.497 3.498zm5.54-.54a.994.994 0 0 1-.004 1.416l-7.451 7.451L6 17.83l1.166-4.08l7.451-7.452a.997.997 0 0 1 1.416-.005z" />
+                                </svg>
+                        </div>
+                        <p className="mt-4">Si, literalmente solo añade la información de tu perfil profesional y guarda la información.</p>
                     </div>
-                    <div className="w-73 h-7 flex justify-center">
+                    <div className="w-73 flex h-7 md:h-auto justify-center items-center">
                         <div className="w-2.5 md:w-full bg-secondary h-full md:h-4"></div>
                     </div>
-                    <div className="w-73 bg-base-200 p-5 rounded">
-                            <HeaderComponent level={3}>
-                                Envía la información
+                    <div className="w-73 bg-base-300 p-5 rounded">
+                            <HeaderComponent level={4}>
+                                Elige la foto, el formato e idioma.
                             </HeaderComponent>
-                            <p>No te preocupes por lo demás, déjalo en nuestras manos.</p>
+                            <div className="flex justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+                                    <path d="M0 0h24v24H0z" fill="none" />
+                                    <g fill="none" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h9m4 0h3m-9 8h9M4 16h3" />
+                                        <circle cx="9" cy="16" r="2" />
+                                        <circle cx="15" cy="8" r="2" />
+                                    </g>
+                                </svg>
+                            </div>
+                            <p className="mt-4">Desde tus CV guardados selecciona los parámetros correspondientes y confirma tu operación. </p>
                     </div>
-                    <div className="w-73 h-7 flex justify-center">
+                    <div className="w-73 flex h-7 md:h-auto justify-center items-center">
                         <div className="w-2.5 md:w-full bg-secondary h-full md:h-4"></div>
                     </div>
-                    <div className="w-73 bg-base-200 p-5 rounded">
-                        <HeaderComponent level={3}>
+                    <div className="w-73 bg-base-300 p-5 rounded">
+                        <HeaderComponent level={4}>
                                 Guarda el PDF generado
                         </HeaderComponent>
-                        <p>Listo! una vez hayas enviado tus datos te generaremos un pdf con el formato que hayas elegido.</p>
+                        <div className="flex justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+                                <path d="M0 0h24v24H0z" fill="none" />
+                                <path fill="currentColor" d="M5 20h14v-2H5zM19 9h-4V3H9v6H5l7 7z" />
+                            </svg>
+                        </div>
+                        <p className="mt-4">Si, así de sencillo, una vez que hayas enviado tu foto el formato y el idioma te daremos un PDF listo, además la información puedes guardarla para re-editarla si lo necesitas.</p>
                     </div>
                 </div>
             </section>

@@ -1,6 +1,7 @@
 function FooterComponent() {
+    const year = new Date().getFullYear();
     return (
-        <footer className="footer sm:footer-horizontal bg-base-100 text-neutral-content p-10">
+        <footer className="footer sm:footer-horizontal bg-base-300 text-neutral-content p-10">
             <aside className="flex flex-col">
                 <img src="favicon.ico" alt="" className="rounded-full"/>
                 <p>
@@ -8,9 +9,10 @@ function FooterComponent() {
                 <br />
                 <span className="text-xs">Desarrollador web FullStack.</span>
                 </p>
+                <p className="row-span-2 col-span-2">Todos los derechos reservados {year}</p>
             </aside>
             <nav>
-                <h6 className="footer-title">Social</h6>
+                {/* <h6 className="footer-title">Social</h6>
                 <div className="grid grid-flow-col gap-4">
                 <a>
                     <svg
@@ -45,7 +47,7 @@ function FooterComponent() {
                         d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"></path>
                     </svg>
                 </a>
-                </div>
+                </div> */}
             </nav>
     </footer>
     );

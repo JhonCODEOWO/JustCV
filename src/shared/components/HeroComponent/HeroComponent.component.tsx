@@ -3,7 +3,7 @@ export interface HeroComponentProps {
     url_img?: string;
     heroContent: string;
     height?: number;
-    onStartNowClick: () => void;
+    onStartNowClick?: () => void;
 }
 
 function HeroComponent({heroContent, title, url_img = '', height = 100, onStartNowClick}: HeroComponentProps) {
@@ -20,7 +20,7 @@ function HeroComponent({heroContent, title, url_img = '', height = 100, onStartN
                 <p className="py-6 text-sm md:text-base">
                     {heroContent}
                 </p>
-                <button className="btn btn-primary" onClick={onStartNowClick}>Empieza ahora</button>
+                {onStartNowClick && <button className="btn btn-primary" onClick={onStartNowClick}>Empieza ahora</button>}
                 </div>
             </div>
         </div>
