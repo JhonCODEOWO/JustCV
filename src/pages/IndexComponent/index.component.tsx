@@ -71,14 +71,6 @@ function IndexPageComponent() {
                     </div>
                 </div>
             </section>
-            <section className="bg-base-200 py-20 px-5">
-                <HeaderComponent level={2} className="text-center mb-10">
-                    Algunos ejemplos
-                </HeaderComponent>
-                <div className="">
-
-                </div>
-            </section>
             <FooterComponent/>
         </div>
     );
